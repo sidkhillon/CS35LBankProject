@@ -19,3 +19,5 @@
 /banknpm-debug.log*
 /bankyarn-debug.log*
 /bankyarn-error.log*
+bank/package-lock.json
+package-lock.json
