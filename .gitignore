@@ -1,0 +1,21 @@
+# dependencies
+/bank/node_modules
+/bank/.pnp
+/bank.pnp.js
+
+# testing
+/bank/coverage
+
+# production
+/bank/build
+
+# misc
+/bank.DS_Store
+/bank.env.local
+/bank.env.development.local
+/bank.env.test.local
+/bank.env.production.local
+
+/banknpm-debug.log*
+/bankyarn-debug.log*
+/bankyarn-error.log*
