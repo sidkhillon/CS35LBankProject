@@ -4,14 +4,18 @@ import "./App.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./Login"
 import Main from "./Main"
+import NavbarComponent from "./Navbar"
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="" element={<Main />} />
-      </Routes>
+      <div>
+        <NavbarComponent />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="" element={<Main />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }
