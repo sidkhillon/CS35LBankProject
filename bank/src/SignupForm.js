@@ -1,5 +1,4 @@
-import { auth } from "./backend/firebase"
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import AuthSignup from "./backend/authentication/AuthSignup";
 import { Alert } from "react-bootstrap";
 import React from "react"
 
@@ -20,21 +19,10 @@ class SignupForm extends React.Component {
   }
   async handleSubmit(event){
     event.preventDefault();
-    if (this.state.password !== this.state.confirm){
-      return this.setState({error: "Passwords Do Not Match"});
-    }
-    this.setState({error: ""});
     this.setState({loading: true});
-    createUserWithEmailAndPassword(auth, this.state.email, this.state.password).then((userCredential) => {
-      const user = userCredential.user;
-      console.log(`Created user ${user}`);
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log (`Error code ${errorCode} with message ${errorMessage}`);
-      this.setState({error: "Ran into an issue creating account"});
-    });
+    this.setState({error: await AuthSignup(this.state.email, this.state.password, this.state.confirm)});
     this.setState({loading: false});
+    // TODO: REROUTE TO OTHER PAGE IF SUCCESSFUL
   }
 
   render() {
@@ -83,50 +71,5 @@ class SignupForm extends React.Component {
     );
   }
 }
-/*
-function Signup(props) {
-  return (
-    <div className="Auth-form-container">
-      <form className="Auth-form">
-        <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign Up</h3>
-          <div className="form-group mt-3">
-            <label>Email address</label>
-            <input
-              type="email"
-              name="email"
-              className="form-control mt-1"
-              placeholder="Enter email"
-            />
-          </div>
-          <div className="form-group mt-3">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              className="form-control mt-1"
-              placeholder="Enter password"
-            />
-          </div>
-          <div className="form-group mt-3">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              name="confirm-password"
-              className="form-control mt-1"
-              placeholder="Confirm password"
-            />
-          </div>
-          <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" onClick={AuthSignup(this.form.email.value, this.form.password.value)}>
-              Submit
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  )
-}
-*/
 
 export default SignupForm;

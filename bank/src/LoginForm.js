@@ -2,6 +2,7 @@ import { auth } from "./backend/firebase"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert } from "react-bootstrap";
 import React from "react"
+import AuthSignin from "./backend/authentication/AuthSignin";
 
 
 class LoginForm extends React.Component {
@@ -20,17 +21,8 @@ class LoginForm extends React.Component {
   }
   async handleSubmit(event){
     event.preventDefault();
-    this.setState({error: ""});
     this.setState({loading: true});
-    signInWithEmailAndPassword(auth, this.state.email, this.state.password).then((userCredential) => {
-      const user = userCredential.user;
-      console.log(`Logged in user ${this.state.email}`);
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log (`Error code ${errorCode} with message ${errorMessage}`);
-      this.setState({error: "Ran into an issue logging in"});
-    });
+    this.setState({error: await AuthSignin(this.state.email, this.state.password)});
     this.setState({loading: false});
   }
 
