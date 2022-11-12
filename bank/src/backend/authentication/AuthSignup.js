@@ -1,4 +1,5 @@
-import { auth } from "../firebase";
+import { auth, db } from "../firebase"
+import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import errorCodes from "../errorCodes.json"
 
@@ -10,6 +11,7 @@ The error is set to the output of this function
 */
 
 async function AuthSignup(email, password, confirm) {
+  let user = null;
   // Checking that the password and its confirmation are the same
   if (password !== confirm){
     //console.log("Password no match");
@@ -19,7 +21,8 @@ async function AuthSignup(email, password, confirm) {
     return "Password must be at least six characters long"
   }
   let toReturn = await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-    const user = userCredential.user;
+    user = userCredential.user;
+    //console.log(`Created user with uid ${user.uid}`);
     /*
     if (user != null){
       console.log("Sending verification email");
@@ -30,6 +33,7 @@ async function AuthSignup(email, password, confirm) {
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+    console.log(error);
     console.log (`Error code ${errorCode} with message ${errorMessage}`);
     for (const errorType in errorCodes){
       const errorObj = errorCodes[errorType];
@@ -39,6 +43,15 @@ async function AuthSignup(email, password, confirm) {
     }
     return "Ran into an issue creating account";
   });
+  // Setting up the user in the database
+  if (user !== null){
+    const docData = {
+      email: user.email,
+      balance: 0,
+      transactions: []
+    }
+    await setDoc(doc(db, "users", user.uid), docData);
+  }
   return toReturn;
   };
 
