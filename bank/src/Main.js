@@ -3,6 +3,8 @@ import Transactions from "./Transactions"
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export default class Main extends Component {
   render() {
@@ -15,10 +17,15 @@ export default class Main extends Component {
     return (
       <div>
         <Container>
-          <Form className="d-flex">
-            <Form.Control type='search' placeholder='search' />
-            <Button>Search</Button>
-          </Form>
+          <Row style={{ marginTop: "20px" }}>
+            <Col></Col>
+            <Col xs="auto" >
+              <Form className="d-flex">
+                <Form.Control type='search' placeholder='search' />
+                <Button>Search</Button>
+              </Form>
+            </Col>
+          </Row>
           <Transactions data={test} />
         </Container>
       </div>
