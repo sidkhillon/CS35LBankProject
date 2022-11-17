@@ -18,11 +18,12 @@ async function addMoney(balID, amount){
             throw new Error("Can't add values less than a cent");
         }
     }
-    const balIDref = doc(db, "Balances", balID);
+    const balIDref = doc(db, "users", balID);
     await updateDoc(balIDref, {
         balance: increment(amount)
     });
-    return "";
+    console.log(`Added ${amount} to balance with ID ${balID}`)
+    return;
 }
 
 

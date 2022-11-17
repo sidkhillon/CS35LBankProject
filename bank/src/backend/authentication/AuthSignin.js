@@ -5,8 +5,8 @@ import errorCodes from "../errorCodes.json";
 async function AuthSignin(email, password){
   let toReturn = await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
     const user = userCredential.user;
-    // console.log(`Logged in user ${email}`);
-    return "";
+    console.log(`Logged in user ${email}, ${user.uid}`);
+    return;
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;

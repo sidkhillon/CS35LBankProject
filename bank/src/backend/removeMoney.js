@@ -17,7 +17,7 @@ async function removeMoney(balID, amount){
             throw new Error("Can't remove values less than a cent");
         }
     }
-    const balIDref = doc(db, "Balances", balID);
+    const balIDref = doc(db, "users", balID);
     const curBal = await getDoc(balIDref);
     if (curBal.data().balance < amount){
         throw new Error("Not enough money in account");
@@ -25,7 +25,8 @@ async function removeMoney(balID, amount){
     await updateDoc(balID, {
         balance: increment(-amount)
     });
-    return "";
+    console.log(`Subtracted ${amount} from balance with ID ${balID}`)
+    return;
 }
 
 

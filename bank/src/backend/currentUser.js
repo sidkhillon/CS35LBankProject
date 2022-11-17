@@ -4,39 +4,33 @@ import { db } from "./firebase"
 import { doc, getDoc } from "firebase/firestore";
 
 let currUser = null;
-let docSnap = null;
+let userData = null;
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
+  if (user) { // User is signed in
     currUser = user;
-    docSnap = await getDoc(doc(db, "users", user.uid));
-  } else {
-    // User is signed out
-    }
+    userData = await getDoc(doc(db, "users", user.uid));
+  }
 });
 
 
 export function getCurrentUID(){
-    // If a user is currently signed in, return the uid
     if (currUser){
         return currUser.uid;
     }
-    //  Otherwise return null
     return null;
 }
 
 export async function getCurrentBalance(){
-    if (docSnap){
-        return docSnap.data().balance;
+    if (userData){
+        return userData.data().balance;
     }
     return null;
 }
 
-export async function getCurrentEmail(){
-    if (docSnap){
-        return docSnap.data().email;
+export function getCurrentEmail(){
+    if (currUser){
+        return currUser.email;
     }
     return null;
 }

@@ -43,7 +43,7 @@ async function AuthSignup(email, password, confirm) {
     }
     return "Ran into an issue creating account";
   });
-  // Setting up the user in the database
+  // Setting up the user document in the Balances collection
   if (user !== null){
     const docData = {
       email: user.email,
