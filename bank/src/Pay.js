@@ -1,4 +1,5 @@
 import React from 'react'
+import moneylogo from "./moneytransfer.png"
 
 class Pay extends React.Component {
     constructor(props) {
@@ -10,7 +11,10 @@ class Pay extends React.Component {
         <div className="Auth-form-container">
           <form className="Auth-form">
             <div className="Auth-form-content">
-              <h3 className="Auth-form-title">Send Money</h3>
+              <h3 className="Auth-form-title">Send Money 
+                <img src = {moneylogo} height = "40"/>
+              </h3>
+              <p className = "note">Transfer money to your friends!</p> 
               <div className="form-group mt-3">
                 <label>User</label>
                 <input 
@@ -28,7 +32,7 @@ class Pay extends React.Component {
               />
             </div>
             <div className="d-grid gap-2 mt-3">
-              <input type="submit" className="btn btn-primary" value="Send" />
+              <input type="submit" className="btn btn-primary" value="Pay" />
             </div>
             </div>
           </form>  

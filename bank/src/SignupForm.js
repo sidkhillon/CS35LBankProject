@@ -1,6 +1,7 @@
 import AuthSignup from "./backend/authentication/AuthSignup";
 import { Alert } from "react-bootstrap";
 import React from "react"
+import signuplogo from "./signup.png"
 
 
 class SignupForm extends React.Component {
@@ -30,7 +31,9 @@ class SignupForm extends React.Component {
       <div className="Auth-form-container">
         <form className="Auth-form" onSubmit={this.handleSubmit}>
           <div className="Auth-form-content">
-            <h3 className="Auth-form-title">Sign Up</h3>
+            <h3 className="Auth-form-title">Sign Up
+            <img src = {signuplogo} height = "30" className = "signupimage" />
+              </h3>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             <div className="form-group mt-3">
               <label>Email Address:</label>
