@@ -1,74 +1,56 @@
-import { serverTimestamp, writeBatch, doc, setDoc, arrayUnion, collection, updateDoc } from "firebase/firestore";
-import removeMoney from "./removeMoney";
-import addMoney from "./addMoney";
+import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment } from "firebase/firestore";
 import { db } from "./firebase";
-import { getCurrentBalance } from "./currentUser";
-import { exit } from "process";
+import { getCurrentBalance, getCurrentUID } from "./currentUser";
 
-async function transaction(senderID, receiverID, note, amount){
-    let valid = true;
-
-    if (senderID == null || receiverID == null){
-        valid = false;
-        throw new Error("Invalid users passed");
+// Transactions only work with the currently logged in user
+async function transaction(receiverID, note, amount){
+    const senderID = getCurrentUID();
+    if (senderID == null){
+        throw new Error("No user logged in");
+    }
+    if (receiverID == null){
+        throw new Error("Invalid recipient passed");
     }
     if (typeof(amount) != "number"){
-        valid = false;
-        console.log(typeof(amount));
         throw new Error("Amount must be a number");
     }
-    if (amount < 0){
-        valid = false;
-        throw new Error("Negative amounts not allowed");
+    if (amount <= 0){
+        throw new Error("Only positive amounts can be sent");
     }
-    if (senderID == receiverID){
-        valid = false;
+    if (senderID === receiverID){
         throw new Error("Cannot send money to self");
-        
     }
-    var balance = getCurrentBalance(); // TODO: FIX
+    const balance = getCurrentBalance();
     if (amount > balance) {
-        valid = false;
-        throw new Error("Insufficient funds in account")
+        throw new Error("Insufficient funds in account");
+    }
+    const batch = writeBatch(db);
+
+    const transactionData = {
+        amount: amount, 
+        date:  serverTimestamp(), 
+        note: note, 
+        receiver: receiverID, 
+        sender: senderID
     }
 
-    if (valid == true) {
-        await addMoney(receiverID, amount).catch((error) => {
-            
-            throw error;
-        });
-        
-        await removeMoney(senderID, amount).catch((error)=>{
-           // console.log(error);
-            throw error;
-        });
-        const batch = writeBatch(db);
-
-        const transactionData = {
-            amount: amount, 
-            date:  serverTimestamp(), 
-            note: note, 
-            receiver: receiverID, 
-            sender: senderID
-        }
-
-        const transactions = collection(db,'Transactions') // collectionRef
-        const transRef = doc(transactions) // docRef
-        const transID = transRef.id // a docRef has an id property
-        await setDoc(transRef, transactionData) // create the document
-
-        const senderDoc = doc(db, "users", senderID);
-        const receiverDoc = doc(db, "users", receiverID);
-
-        await updateDoc(senderDoc, {
-            transactions: arrayUnion(transID)
-        });
-
-        await updateDoc(receiverDoc, {
-            transactions: arrayUnion(transID)
-        });
-    }
-
+    const transactions = collection(db,'Transactions') // collectionRef
+    // Getting all the document refs
+    const transRef = doc(transactions) // docRef
+    const senderRef = doc(db, "users", senderID);
+    const receiverRef = doc(db, "users", receiverID);
+    const transID = transRef.id // a docRef has an id property
+    batch.set(transRef, transactionData);
+    batch.update(senderRef, {
+        balance: increment(-amount),
+        transactions: arrayUnion(transID)
+    });
+    batch.update(receiverRef, {
+        balance: increment(amount),
+        transactions: arrayUnion(transID)
+    })
+    await batch.commit();
+    return;
 }
 
 

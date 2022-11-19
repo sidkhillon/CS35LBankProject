@@ -1,7 +1,6 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
 import addMoney from "./backend/addMoney";
-import { getCurrentUID } from "./backend/currentUser";
 
 class DepositMoney extends React.Component {
     constructor(props) {
@@ -19,13 +18,11 @@ class DepositMoney extends React.Component {
 
     async handleSubmit(event){
         event.preventDefault();
-        const uid = getCurrentUID();
-        if (uid !== null){
-          this.setState({error: await addMoney(uid, this.state.amount).catch((error) => { return error; })});
-        }
-        else{
-          this.setState({error: "No User is signed in"});
-        }
+        await addMoney(Number(this.state.amount)).then((r) => {
+          this.setState({error: "Success"});
+        }).catch((e) => {
+          this.setState({error: String(e)})
+        });
     }
 
     render() {

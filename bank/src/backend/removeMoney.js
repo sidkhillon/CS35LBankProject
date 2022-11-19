@@ -1,14 +1,20 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { increment } from "firebase/firestore";
+import { getCurrentBalance, getCurrentUID } from "./currentUser";
 import { db } from "./firebase"
 
-async function removeMoney(balID, amount){
+// You can only remove money from your account
+async function removeMoney(amount){
+    const currUID = getCurrentUID();
+    if (currUID == null){
+        throw new Error("No user logged in");
+    }
     if (typeof(amount) != "number"){
         throw new Error("Amount must be a number");
     }
-    // Must add a set amount of money
-    if (amount < 0){
-        throw new Error("Can't remove a negative amount of money");
+    // Must remove a set amount of money
+    if (amount <= 0){
+        throw new Error("Can only remove positive amounts of money");
     }
     // Can't add less than a cent of money
     const amtStr = String(amount);
@@ -17,16 +23,15 @@ async function removeMoney(balID, amount){
             throw new Error("Can't remove values less than a cent");
         }
     }
-    const balIDref = doc(db, "users", balID);
-    const curBal = await getDoc(balIDref);
-    if (curBal.data().balance < amount){
+    const userRef = doc(db, "users", currUID);
+    // Makes sure that the amount to remove is less than the current balance
+    if (getCurrentBalance() < amount){
         throw new Error("Not enough money in account");
     }
-    await updateDoc(balIDref, {
+    await updateDoc(userRef, {
         balance: increment(-amount)
-        
     });
-    console.log(`Subtracted ${amount} from balance with ID ${balID}`)
+    console.log(`Subtracted $${amount} from currently logged in user`);
     return;
 }
 

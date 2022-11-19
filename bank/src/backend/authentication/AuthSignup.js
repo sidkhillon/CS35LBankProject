@@ -1,6 +1,6 @@
 import { auth, db } from "../firebase"
 import { doc, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import errorCodes from "../errorCodes.json"
 
 /* 

@@ -1,6 +1,5 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
-import { getCurrentUID } from "./backend/currentUser";
 import getUserByEmail from "./backend/getUserByEmail";
 import transaction from "./backend/transaction";
 
@@ -21,8 +20,7 @@ class TransactionForm extends React.Component {
     async handleSubmit(event){
         event.preventDefault();
         const toUID = await getUserByEmail(this.state.email);
-        const fromUID = getCurrentUID();
-        await transaction(fromUID, toUID, this.state.note, Number(this.state.amount)).then((r) => {
+        await transaction(toUID, this.state.note, Number(this.state.amount)).then((r) => {
           this.setState({error: "Success"});
         }).catch((e) => {
           this.setState({error: String(e)})
