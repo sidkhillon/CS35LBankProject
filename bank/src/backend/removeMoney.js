@@ -1,5 +1,4 @@
-import { doc, updateDoc } from "firebase/firestore";
-import { increment } from "firebase/firestore";
+import { arrayUnion, collection, doc, serverTimestamp, increment, writeBatch } from "firebase/firestore";
 import { getCurrentBalance, getCurrentUID } from "./currentUser";
 import { db } from "./firebase"
 
@@ -23,14 +22,30 @@ async function removeMoney(amount){
             throw new Error("Can't remove values less than a cent");
         }
     }
-    const userRef = doc(db, "users", currUID);
     // Makes sure that the amount to remove is less than the current balance
     if (getCurrentBalance() < amount){
         throw new Error("Not enough money in account");
     }
-    await updateDoc(userRef, {
-        balance: increment(-amount)
+
+    const batch = writeBatch(db);
+    // Everytime the user makes a withdrawal, a special transaction is created that stores that
+    const transactionData = {
+        amount: -amount,
+        date: serverTimestamp(),
+        note: "Withdrawal",
+        receiver: currUID,
+        sender: currUID
+    }
+    const transactions = collection(db, "Transactions");
+    const transRef = doc(transactions);
+    const userRef = doc(db, "users", currUID);
+    const transID = transRef.id;
+    batch.set(transRef, transactionData);
+    batch.update(userRef, {
+        balance: increment(-amount),
+        transactions: arrayUnion(transID)
     });
+    await batch.commit();
     console.log(`Subtracted $${amount} from currently logged in user`);
     return;
 }

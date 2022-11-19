@@ -34,12 +34,12 @@ async function transaction(receiverID, note, amount){
         sender: senderID
     }
 
-    const transactions = collection(db,'Transactions') // collectionRef
+    const transactions = collection(db,'Transactions'); // collectionRef
     // Getting all the document refs
-    const transRef = doc(transactions) // docRef
+    const transRef = doc(transactions); // docRef
     const senderRef = doc(db, "users", senderID);
     const receiverRef = doc(db, "users", receiverID);
-    const transID = transRef.id // a docRef has an id property
+    const transID = transRef.id; // a docRef has an id property
     batch.set(transRef, transactionData);
     batch.update(senderRef, {
         balance: increment(-amount),

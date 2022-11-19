@@ -8,6 +8,7 @@ import Main from "./Main"
 import SignupForm from './SignupForm'
 import TransactionForm from './TransactionForm'
 import DepositMoney from './DepositMoney'
+import WithdrawMoney from './WithdrawMoney'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/transaction" element={<TransactionForm />}/>
         <Route path="/deposit" element={<DepositMoney />}/>
+        <Route path="/withdraw" element={<WithdrawMoney />}/>
         <Route path="" element={<Main />} />
       </Routes>
     </BrowserRouter>

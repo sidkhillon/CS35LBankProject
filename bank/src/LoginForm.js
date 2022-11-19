@@ -20,7 +20,12 @@ class LoginForm extends React.Component {
   async handleSubmit(event){
     event.preventDefault();
     this.setState({loading: true});
-    this.setState({error: await AuthSignin(this.state.email, this.state.password)});
+    await AuthSignin(this.state.email, this.state.password).then((r) => {
+      this.setState({error: r})
+    });
+    await getAllTransactions().then((r) => {
+      console.log(r);
+    })
     this.setState({loading: false});
   }
 

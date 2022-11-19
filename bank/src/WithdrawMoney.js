@@ -1,8 +1,8 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
-import addMoney from "./backend/addMoney";
+import removeMoney from "./backend/removeMoney";
 
-class DepositMoney extends React.Component {
+class WithdrawMoney extends React.Component {
     constructor(props) {
         super(props);
         this.state = {amount: "", error: ''}
@@ -18,7 +18,7 @@ class DepositMoney extends React.Component {
 
     async handleSubmit(event){
         event.preventDefault();
-        await addMoney(Number(this.state.amount)).then((r) => {
+        await removeMoney(Number(this.state.amount)).then((r) => {
           this.setState({error: "Success"});
         }).catch((e) => {
           this.setState({error: String(e)})
@@ -30,7 +30,7 @@ class DepositMoney extends React.Component {
             <div className="Auth-form-container">
               <form className="Auth-form" onSubmit={this.handleSubmit}>
                 <div className="Auth-form-content">
-                  <h3 className="Auth-form-title">Input Amount to Deposit</h3>
+                  <h3 className="Auth-form-title">Input Amount to Withdraw</h3>
                   { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
                   <div className="form-group mt-3">
                     <label>Amount:</label>
@@ -53,4 +53,4 @@ class DepositMoney extends React.Component {
     }
 }
 
-export default DepositMoney;
+export default WithdrawMoney;
