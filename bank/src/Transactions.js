@@ -8,7 +8,7 @@ function Transactions(props) {
                 <tr>
                     <th>Date</th>
                     <th>Description</th>
-                    <th>Category</th>
+                    <th>Person</th>
                     <th>Amount</th>
                 </tr>
             </thead>
@@ -18,7 +18,7 @@ function Transactions(props) {
                         <tr>
                             <th>{props.data[key]["date"]}</th>
                             <th>{props.data[key]["description"]}</th>
-                            <th>{props.data[key]["category"]}</th>
+                            <th>{"sender" in props.data[key] ? "Sender: " +  props.data[key]["sender"] : "Recipient: " + props.data[key]["recipient"]}</th>
                             <th>{props.data[key]["amount"]}</th>
                         </tr>
                     )

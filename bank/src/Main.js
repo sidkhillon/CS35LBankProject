@@ -9,10 +9,10 @@ import Col from 'react-bootstrap/Col'
 export default class Main extends Component {
   render() {
     const test = {
-      12319083: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 123 },
-      12319084: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 124 },
-      12319085: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 125 },
-      12319086: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 126 }
+      12319083: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'testSend', 'amount': 123 },
+      12319084: { 'date': 'testDate', 'description': 'testDesc', 'recipient': 'testRecip', 'amount': 124 },
+      12319085: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'testSend2', 'amount': 125 },
+      12319086: { 'date': 'testDate', 'description': 'testDesc', 'recipient': 'recipient2', 'amount': 126 }
     }
     return (
       <div>
