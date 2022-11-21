@@ -62,3 +62,21 @@ export async function getDeposits(UID){
     });
     return transactions;
 }
+//takes in a date (must enter date as a javascript Date object) as well as the UID and returns array of all transactions in the specified date
+//https://www.codegrepper.com/code-examples/whatever/convert+date+to+firebase+timestamp
+export async function getTransactionsByDate(UID, date){
+    const transRef = collection(db, "Transactions");
+    //store all collections where receiver or sender === UID in q
+    const q = query(transRef, where("receiver", "==", UID), where("sender", "==", UID), );
+    const querySnapshot = await getDocs(q);
+    let transactions = []  
+    //iterate through doc and find all the collections where the date is the same as the given date
+    querySnapshot.forEach((doc) => {
+        const d = doc.data().get("date");
+        const transDate = new TimeStamp(d.seconds , d.nanoseconds).toDate();
+        if(date === transDate){
+            transactions.push(doc.data());
+        }      
+    });
+    return transactions;
+}
