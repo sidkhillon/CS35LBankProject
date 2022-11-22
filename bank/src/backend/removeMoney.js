@@ -23,8 +23,9 @@ async function removeMoney(amount){
         }
     }
     // Makes sure that the amount to remove is less than the current balance
-    if (getCurrentBalance() < amount){
-        throw new Error("Not enough money in account");
+    const balance = await getCurrentBalance();
+    if (balance < amount){
+        throw new Error("Insufficient funds");
     }
 
     const batch = writeBatch(db);

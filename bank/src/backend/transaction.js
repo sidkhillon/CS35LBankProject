@@ -1,6 +1,7 @@
-import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment } from "firebase/firestore";
+import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment, Timestamp } from "firebase/firestore";
 import { db } from "./firebase";
 import { getCurrentBalance, getCurrentUID } from "./currentUser";
+import { getTransactionsByDate } from "./getTransactions";
 
 // Transactions only work with the currently logged in user
 async function transaction(receiverID, note, amount){
@@ -20,7 +21,7 @@ async function transaction(receiverID, note, amount){
     if (senderID === receiverID){
         throw new Error("Cannot send money to self");
     }
-    const balance = getCurrentBalance();
+    const balance = await getCurrentBalance();
     if (amount > balance) {
         throw new Error("Insufficient funds in account");
     }
@@ -50,6 +51,9 @@ async function transaction(receiverID, note, amount){
         transactions: arrayUnion(transID)
     })
     await batch.commit();
+    console.log(`${senderID} sent $${amount} to ${receiverID}`);
+    // const transDate = new Timestamp(d.seconds , d.nanoseconds).toDate();
+    // const trans = await getTransactionsByDate(cqEFcSVY7UTpNTXFFkLc5pDO6C53, )
     return;
 }
 

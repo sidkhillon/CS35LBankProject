@@ -10,11 +10,11 @@ async function getUserByEmail(email){
     if (querySnapshot.empty){
         return null;
     }
-    let UID = null;
+    let userID = null;
     querySnapshot.forEach((doc) => {
-        UID = doc.id;
+        userID = doc.id;
     });
-    return UID;
+    return userID;
 }
 
 export default getUserByEmail;

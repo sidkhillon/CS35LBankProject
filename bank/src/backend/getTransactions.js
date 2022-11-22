@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, Timestamp } from "firebase/firestore";
 import { db } from "./firebase"
 
 // Takes an array of transaction IDs as input and returns an array of those transaction objects
@@ -10,7 +10,7 @@ export async function processsTransactions(transactions){
         const transData = transSnap.data();
         allTransactions.push(transData);
     }
-    return allTransactions
+    return allTransactions;
 }
 
 // Given a UID, returns an array of all of that users transactions
@@ -73,7 +73,7 @@ export async function getTransactionsByDate(UID, date){
     //iterate through doc and find all the collections where the date is the same as the given date
     querySnapshot.forEach((doc) => {
         const d = doc.data().get("date");
-        const transDate = new TimeStamp(d.seconds , d.nanoseconds).toDate();
+        const transDate = new Timestamp(d.seconds , d.nanoseconds).toDate();
         if(date === transDate){
             transactions.push(doc.data());
         }      
