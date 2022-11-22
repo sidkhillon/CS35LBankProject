@@ -7,13 +7,13 @@ function AddTransaction(props) {
   return (
     <Modal show = {props.show} onHide= {props.hide}>
         <Modal.Header closeButton>
-          <Modal.Title>Log a Transaction</Modal.Title>
+          <Modal.Title>Add a Transaction</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Form>
                 <Form.Group>
                     <Form.FloatingLabel label="Amount">
-                        <Form.Control type="number" placeholder="12.34" autofocus/>
+                        <Form.Control type="number" placeholder="12.34" step = "0.01" autofocus/>
                     </Form.FloatingLabel>
                 </Form.Group>
                 <Form.Group>

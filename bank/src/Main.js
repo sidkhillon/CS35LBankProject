@@ -17,21 +17,40 @@ export default class Main extends Component {
 
   render() {
     const test = {
-      12319083: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'testSend', 'amount': 123 },
-      12319084: { 'date': 'testDate', 'description': 'testDesc', 'recipient': 'testRecip', 'amount': 124 },
-      12319085: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'testSend2', 'amount': 125 },
-      12319086: { 'date': 'testDate', 'description': 'testDesc', 'recipient': 'recipient2', 'amount': 126 }
+      12319083: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Jackson', 'amount': 123 },
+      12319084: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Jackson', 'recipient': 'Sid', 'amount': 124 },
+      12319085: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Juskeerat', 'amount': 125 },
+      12319086: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Jackson', 'amount': 126 }
     }
+    const user = "Sid"
+    const bal = 124.23
 
     const setModalVisibility = (val) => this.setState({modalVisible: val});
+    const currentHrs = new Date().getHours();
     return (
       <div>
         <Container>
+          <Row>
+            <Col>
+              <div style={{display: 'flex', justifyContent: "center"}}>
+                <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + user}</h1>
+              </div>
+              <div style={{display: 'flex', justifyContent: "center"}}>
+                <h3>{"Your balance is $" + bal}</h3>
+              </div>
+            </Col>
+          </Row>
+          <hr/>
           <Row style={{ marginTop: "20px" }}>
             <Col></Col>
             <Col xs="auto" >
               <Form className="d-flex">
-                <Form.Control type='search' placeholder='search' />
+                <Form.Control type='date'/>
+                <Form.Select>
+                    <option>Select a User</option>
+                    <option value="test">test</option>
+                    <option value="test2">test2</option>
+                </Form.Select>
                 <Button>Search</Button>
               </Form>
             </Col>
