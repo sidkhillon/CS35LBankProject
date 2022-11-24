@@ -51,6 +51,23 @@ export async function getWithdrawals(UID){
     return transactions;
 }
 
+//takes in a d1 (must enter date as a javascript Date object) as well as the UID and returns array of all transactions in the specified date
+export async function getTransactionsByDate(UID, d1){
+    const transRef = collection(db, "Transactions");
+    //creates new date d2 which is one day after d1
+    var d2 = new Date(d1.valueOf());
+    d2.setDate(d1.getDate()+1);
+    //store all collections where receiver or sender === UID in q
+    const q = query(transRef, where("receiver", "==", UID), where("sender", "==", UID),('date', '>=', d1), ('date','<=', d2) );
+    const querySnapshot = await getDocs(q);
+    let transactions = []  
+    //iterate through doc and find all the collections where the date is the same as the given date
+    querySnapshot.forEach((doc) => {
+        transactions.push(doc.data());
+    });
+    return transactions;
+}
+
 // Takes as input a UID and returns an array of all deposit transaction objects
 export async function getDeposits(UID){
     const transRef = collection(db, "Transactions");
@@ -59,24 +76,6 @@ export async function getDeposits(UID){
     let transactions = []
     querySnapshot.forEach((doc) => {
         transactions.push(doc.data());
-    });
-    return transactions;
-}
-//takes in a date (must enter date as a javascript Date object) as well as the UID and returns array of all transactions in the specified date
-//https://www.codegrepper.com/code-examples/whatever/convert+date+to+firebase+timestamp
-export async function getTransactionsByDate(UID, date){
-    const transRef = collection(db, "Transactions");
-    //store all collections where receiver or sender === UID in q
-    const q = query(transRef, where("receiver", "==", UID), where("sender", "==", UID), );
-    const querySnapshot = await getDocs(q);
-    let transactions = []  
-    //iterate through doc and find all the collections where the date is the same as the given date
-    querySnapshot.forEach((doc) => {
-        const d = doc.data().get("date");
-        const transDate = new Timestamp(d.seconds , d.nanoseconds).toDate();
-        if(date === transDate){
-            transactions.push(doc.data());
-        }      
     });
     return transactions;
 }
