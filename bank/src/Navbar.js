@@ -17,9 +17,17 @@ function NavbarComponent() {
             <Navbar bg="light">
                 <Container>
                     <Navbar.Brand>
-                        <img src = {crownlogo} height = "60"/> 
-                           Opes
+                        <a href = "/" ><img src = {crownlogo} height = "60"/></a>
+                          Opes
                     </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/pay">Pay</Nav.Link>
+            <Nav.Link href="/loginform">Login</Nav.Link>
+            <Nav.Link href="/signup">Signup</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
                     <Navbar.Text>{user}</Navbar.Text>
                 </Container>
             </Navbar>
