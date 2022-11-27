@@ -3,6 +3,8 @@ import Transactions from "./Transactions"
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container'
+import { getTransactionsByDate } from "./backend/getTransactions";
+import { getSharedTransactions } from "./backend/getTransactions";
 
 export default class Main extends Component {
   render() {
@@ -12,6 +14,8 @@ export default class Main extends Component {
       12319085: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 125 },
       12319086: { 'date': 'testDate', 'description': 'testDesc', 'category': 'testCat', 'amount': 126 }
     }
+    const transactions = getSharedTransactions("Cxh9bLfC9BX9UQUvIGPL6Tp7QqB2", "cqEFcSVY7UTpNTXFFkLc5pDO6C53");
+    console.log(transactions);
     return (
       <div>
         <Container>
