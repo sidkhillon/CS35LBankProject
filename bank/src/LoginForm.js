@@ -1,10 +1,8 @@
-import { auth } from "./backend/firebase"
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert } from "react-bootstrap";
 import React from "react"
 
 import AuthSignin from "./backend/authentication/AuthSignin";
-
+import { getAllTransactions } from "./backend/getTransactions";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -23,7 +21,12 @@ class LoginForm extends React.Component {
   async handleSubmit(event){
     event.preventDefault();
     this.setState({loading: true});
-    this.setState({error: await AuthSignin(this.state.email, this.state.password)});
+    await AuthSignin(this.state.email, this.state.password).then((r) => {
+      this.setState({error: r})
+    });
+    await getAllTransactions().then((r) => {
+      console.log(r);
+    })
     this.setState({loading: false});
   }
 
@@ -32,9 +35,7 @@ class LoginForm extends React.Component {
       <div className="Auth-form-container">
         <form className="Auth-form" onSubmit={this.handleSubmit}>
           <div className="Auth-form-content">
-            <h3 className="Auth-form-title">Login
-              
-            </h3>
+            <h3 className="Auth-form-title">Login</h3>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             <div className="form-group mt-3">
               <label>Email Address:</label>

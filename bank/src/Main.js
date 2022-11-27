@@ -22,11 +22,6 @@ export default class Main extends Component {
       12319085: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Juskeerat', 'amount': 125 },
       12319086: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Jackson', 'amount': 126 }
     }
-    const user = "Sid"
-    const bal = 124.23
-
-    const setModalVisibility = (val) => this.setState({modalVisible: val});
-    const currentHrs = new Date().getHours();
     return (
       <div>
         <Container>

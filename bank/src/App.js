@@ -4,6 +4,10 @@ import "./App.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./Login"
 import Main from "./Main"
+import SignupForm from './SignupForm'
+import TransactionForm from './TransactionForm'
+import DepositMoney from './DepositMoney'
+import WithdrawMoney from './WithdrawMoney'
 import NavbarComponent from "./Navbar"
 import Pay from "./Pay"
 import LoginForm from "./LoginForm"
@@ -12,6 +16,15 @@ import SignupForm from "./SignupForm.js"
 function App() {
   return (
     <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/loginform" element={<LoginForm/>} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/transaction" element={<TransactionForm />}/>
+        <Route path="/deposit" element={<DepositMoney />}/>
+        <Route path="/withdraw" element={<WithdrawMoney />}/>
+        <Route path="" element={<Main />} />
+      </Routes>
       <div>
         <NavbarComponent />
         <Routes>
