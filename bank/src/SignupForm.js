@@ -1,7 +1,8 @@
 import AuthSignup from "./backend/authentication/AuthSignup";
 import { Alert } from "react-bootstrap";
-import React from "react"
-import signuplogo from "./assets/signup.png"
+import React from "react";
+import signuplogo from "./assets/signup.png";
+import { Link } from "react-router-dom";
 
 
 class SignupForm extends React.Component {
@@ -19,15 +20,14 @@ class SignupForm extends React.Component {
     this.setState({[name]: value});
   }
   async handleSubmit(event){
+    // Prevents page from reloading on submit
     event.preventDefault();
-    // if (this.state.email.length < 6 || this.state.confirm.length < 6) {
-    //   this.setState({error: 'Passwords must be at least 6 characters long.'});
-    //   return;
-    // }
+    // Can't do anything while function is loading
     this.setState({loading: true});
     const err = await AuthSignup(this.state.email, this.state.password, this.state.confirm);
     this.setState({loading: false});
-    if (err == "") {
+    if (err === null) {
+      // If no error, redirect to the main page, as user is logged in
       this.setState({error: 'Success! Welcome to Opes.'});
       await this.timeout(1000);
       window.location = '/';
@@ -47,7 +47,7 @@ class SignupForm extends React.Component {
         <form className="Auth-form" onSubmit={this.handleSubmit}>
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Sign Up
-            <img src = {signuplogo} height = "30" className = "signupimage" />
+            <img src = {signuplogo} height = "30" className = "signupimage" alt="add_user"/>
               </h3>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             <div className="form-group mt-3">
@@ -82,6 +82,9 @@ class SignupForm extends React.Component {
           </div>
           <div className="d-grid gap-2 mt-3">
             <input type="submit" disabled={this.state.loading} className="btn btn-primary" value="Submit" />
+          </div>
+          <div className="d-grid gap-2 mt-3">
+            <p>Already have an account? <Link to="/loginform">Login</Link></p>
           </div>
           </div>
         </form>  

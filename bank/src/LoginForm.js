@@ -1,10 +1,7 @@
-import { auth } from "./backend/firebase"
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert } from "react-bootstrap";
 import React from "react"
-
+import { Link } from "react-router-dom";
 import AuthSignin from "./backend/authentication/AuthSignin";
-import { getCurrentEmail } from "./backend/currentUser";
 
 
 class LoginForm extends React.Component {
@@ -22,13 +19,15 @@ class LoginForm extends React.Component {
     this.setState({[name]: value});
   }
   async handleSubmit(event){
+    // Prevents page from reloading
     event.preventDefault();
+    // Can't do anything while the function is loadinh
     this.setState({loading: true});
     const err = await AuthSignin(this.state.email, this.state.password);
     this.setState({loading: false});
     if (err == null) {
-      this.setState({error: 'Success!'});
-      console.log(getCurrentEmail());
+      // If no error, redirect to main page, because user is signed in
+      this.setState({error: 'Signed In!'});
       await this.timeout(1000);
       window.location = '/';
     }
@@ -72,6 +71,9 @@ class LoginForm extends React.Component {
           </div>
           <div className="d-grid gap-2 mt-3">
             <input type="submit" disabled={this.state.loading} className="btn btn-primary" value="Submit" />
+          </div>
+          <div className="d-grid gap-2 mt-3">
+            <p>Need an account? <Link to="/signup">Signup</Link></p>
           </div>
           </div>
         </form>  

@@ -12,7 +12,7 @@ function NavbarComponent() {
             <Navbar bg="light">
                 <Container>
                     <Navbar.Brand>
-                        <a href = "/" ><img src = {crownlogo} height = "60"/></a>
+                        <a href = "/" ><img src = {crownlogo} height = "60" alt="opes-logo"/></a>
                             &nbsp;Opes
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />

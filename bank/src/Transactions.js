@@ -21,7 +21,7 @@ function Transactions(props) {
                             <th>{props.data[key]["sender"] + " → " + props.data[key]["recipient"]}</th>
                             <th>{props.data[key]["description"]}</th>
                             <th>{props.data[key]["date"]}</th>
-                            <th style={{color: props.data[key]["sender"] === currUser ? 'red' : 'green'}} >{props.data[key]["recipient"] === currUser? "+" +  props.data[key]["amount"] : "-" + props.data[key]["amount"]}</th>
+                            <th style={{color: props.data[key]["sender"] === currUser ? 'red' : 'green'}} >{(props.data[key]["recipient"] === currUser) ? "+" : "-"}${props.data[key]["amount"]}</th>
                         </tr>
                     )
                 })}
