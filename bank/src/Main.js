@@ -72,7 +72,7 @@ export default class Main extends Component {
           <Row>
             <Col>
               <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
-                <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.name}</h1>
+                <h1 style = {{color: "#E38424"}}>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.name}</h1>
               </div>
               <div style={{display: 'flex', justifyContent: "center"}}>
                 <h3>{"Your balance is $" + this.state.balance}</h3>

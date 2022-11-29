@@ -15,13 +15,19 @@ function Transactions(props) {
             </thead>
             <tbody>
                 {Object.keys(props.data).map((key, index) => {
+                    let amt = props.data[key]["amount"];
+                    if (props.data[key]["sender"] !== props.data[key]["recipient"]){
+                        if (props.data[key]["sender"] === currUser){
+                            amt *= -1;
+                        }
+                    }
                     return (
                         <tr>
                             {/* <th>{"sender" in props.data[key] ? props.data[key]["sender"] : props.data[key]["recipient"]}</th> */}
-                            <th>{props.data[key]["sender"] + " → " + props.data[key]["recipient"]}</th>
+                            <th>{props.data[key]["sender"] !== props.data[key]["recipient"] ? props.data[key]["sender"] + " → " + props.data[key]["recipient"] : "Bank Transfer"}</th>
                             <th>{props.data[key]["description"]}</th>
                             <th>{props.data[key]["date"]}</th>
-                            <th style={{color: props.data[key]["sender"] === currUser ? 'red' : 'green'}} >{(props.data[key]["recipient"] === currUser) ? "+" : "-"}${props.data[key]["amount"]}</th>
+                            <th style={{color: amt < 0 ? 'red' : 'green'}} >{amt < 0 ? "-" : "+"}${Math.abs(amt)}</th>
                         </tr>
                     )
                 })}
