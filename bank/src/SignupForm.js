@@ -20,10 +20,22 @@ class SignupForm extends React.Component {
   }
   async handleSubmit(event){
     event.preventDefault();
+    if (this.state.email.length < 6 || this.state.confirm.length < 6) {
+      this.setState({error: 'Passwords must be at least 6 characters long.'});
+      return;
+    }
     this.setState({loading: true});
     this.setState({error: await AuthSignup(this.state.email, this.state.password, this.state.confirm)});
     this.setState({loading: false});
-    // TODO: REROUTE TO OTHER PAGE IF SUCCESSFUL
+    if (this.state.error == '') {
+      this.setState({error: 'Success! Welcome to Opes.'});
+    }
+    await this.timeout(1000);
+    window.location = '/';
+  }
+
+  timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
   }
 
   render() {

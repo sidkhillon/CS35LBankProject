@@ -8,6 +8,8 @@ import NavbarComponent from "./Navbar"
 import Pay from "./Pay"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm.js"
+import DepositMoney from "./DepositMoney"
+import WithdrawMoney from './WithdrawMoney'
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/loginform" element={<LoginForm/>} />
           <Route path="/pay" element={<Pay/>} />
+          <Route path="/deposit" element={<DepositMoney />} />
+          <Route path="/withdraw" element={<WithdrawMoney />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="" element={<Main />} />
         </Routes>

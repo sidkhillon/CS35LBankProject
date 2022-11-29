@@ -25,6 +25,15 @@ class LoginForm extends React.Component {
     this.setState({loading: true});
     this.setState({error: await AuthSignin(this.state.email, this.state.password)});
     this.setState({loading: false});
+    if (this.state.error == '') {
+      this.setState({error: 'Success!'});
+    }
+    await this.timeout(1000);
+    window.location = '/';
+  }
+
+  timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
   }
 
   render() {
@@ -47,7 +56,7 @@ class LoginForm extends React.Component {
               />
             </div>
             <div className="form-group mt-3">
-            <label>Password</label>
+            <label>Password:</label>
             <input
               type="password"
               name="password"

@@ -1,7 +1,6 @@
 import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment, Timestamp } from "firebase/firestore";
 import { db } from "./firebase";
 import { getCurrentBalance, getCurrentUID } from "./currentUser";
-import { getTransactionsByDate } from "./getTransactions";
 
 // Transactions only work with the currently logged in user
 async function transaction(receiverID, note, amount){
