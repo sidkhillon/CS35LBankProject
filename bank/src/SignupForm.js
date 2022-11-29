@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 class SignupForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {email: '', password: '', confirm: '', error: '', loading: false};
+    this.state = {email: '', password: '', confirm: '', error: '', loading: false, name: ''};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -56,8 +56,8 @@ class SignupForm extends React.Component {
                 type="name"
                 name="name"
                 className="form-control mt-1"
-                // value={this.state.email}
-                // onChange={this.handleChange}
+                value={this.state.name}
+                onChange={this.handleChange}
               />
             </div>
             <div className="form-group mt-3">
