@@ -3,14 +3,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { db } from "./firebase"
 import { doc, getDoc } from "firebase/firestore";
 
-let currUser = null;
+let currUser = auth.currentUser;
 let userData = null;
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) { // User is signed in
-    currUser = user;
-    userData = await getDoc(doc(db, "users", user.uid));
-  }
+    if (user) { // User is signed in
+        currUser = user;
+        userData = await getDoc(doc(db, "users", user.uid));
+    }
 });
 
 
