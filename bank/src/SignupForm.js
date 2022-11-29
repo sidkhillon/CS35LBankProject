@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 class SignupForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {email: '', password: '', confirm: '', error: '', loading: false, name: ''};
+    this.state = {email: '', password: '', confirm: '', error: '', loading: false, name: '', errorType: 'danger'};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,7 +28,7 @@ class SignupForm extends React.Component {
     this.setState({loading: false});
     if (err === null) {
       // If no error, redirect to the main page, as user is logged in
-      this.setState({error: 'Success! Welcome to Opes.'});
+      this.setState({error: 'Success! Welcome to Opes.', errorType:'success'});
       await this.timeout(1000);
       window.location = '/';
     }
@@ -49,7 +49,7 @@ class SignupForm extends React.Component {
             <h3 className="Auth-form-title">Sign Up
             <img src = {signuplogo} height = "30" className = "signupimage" alt="add_user"/>
               </h3>
-            { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+            { this.state.error && <Alert variant= {this.state.errorType}>{this.state.error}</Alert> }
             <div className="form-group mt-3">
               <label>Name: </label>
               <input 

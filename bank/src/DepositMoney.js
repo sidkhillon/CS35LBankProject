@@ -5,7 +5,7 @@ import addMoney from "./backend/addMoney";
 class DepositMoney extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {amount: "", error: ''}
+        this.state = {amount: "", error: '', errorType: "danger"}
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -19,7 +19,7 @@ class DepositMoney extends React.Component {
     async handleSubmit(event){
         event.preventDefault();
         await addMoney(Number(this.state.amount)).then((r) => {
-          this.setState({error: "Success"});
+          this.setState({error: "Success", errorType: "success"});
         }).catch((e) => {
           this.setState({error: String(e)})
         });
@@ -40,7 +40,7 @@ class DepositMoney extends React.Component {
               <form className="Auth-form" onSubmit={this.handleSubmit}>
                 <div className="Auth-form-content">
                   <h3 className="Auth-form-title">Input Amount to Deposit</h3>
-                  { this.state.error && <Alert variant="danger">{this.state.error}</Alert> } 
+                  { this.state.error && <Alert variant= {this.state.errorType} >{this.state.error}</Alert> } 
                   <div className="form-group mt-3">
                     <label>Amount:</label>
                     <input 
