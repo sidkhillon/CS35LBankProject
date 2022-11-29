@@ -1,6 +1,24 @@
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "./firebase"
 
+/*
+Transactions:
+All transactions are stored with a sender, recipient, amount, note, and time
+Users store an array of transaction IDs
+If the user is the recipient, they gained money
+If the user is the sender, they lost money
+Users cannot send to themselves
+Transactions in general should have a positive amount, with one exception:
+Withdrawals and Deposits:
+When a user makes a withdrawal or makes a deposit, it is stored as a transaction
+The sender and recipient are the same, as transactions cannot be made with oneself
+If the user made a withdrawal, the amount is negative
+This is the only case in which the amount can be negative
+If the user made a deposit, the amount is positive
+The note is also set to 'Deposit' or 'Withdrawal', but this should not be used to check the type
+Instead, this should be done by checking if the sender UID and receiver UID are the same
+*/
+
 // Takes an array of transaction IDs as input and returns an array of those transaction objects
 export async function processsTransactions(transactions){
     const allTransactions = []
