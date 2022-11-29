@@ -12,8 +12,11 @@ async function removeMoney(amount){
         throw new Error("Amount must be a number");
     }
     // Must remove a set amount of money
-    if (amount <= 0){
+    if (amount < 0){
         throw new Error("Can only remove positive amounts of money");
+    }
+    if (amount == 0){
+        throw new Error("Can only remove a non-zero amount of money");
     }
     // Can't add less than a cent of money
     const amtStr = String(amount);
