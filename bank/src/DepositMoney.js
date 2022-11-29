@@ -24,7 +24,7 @@ class DepositMoney extends React.Component {
           this.setState({error: String(e)})
         });
         await this.timeout(500)
-        if (this.state.error == "Success") {
+        if (this.state.error === "Success") {
           await this.timeout(500)
           window.location = '/';
         }

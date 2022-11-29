@@ -23,7 +23,7 @@ export function getCurrentUID(){
 
 export async function getCurrentBalance(){
     if (userData){
-        return userData.data().balance;
+        return userData.data().balance.toFixed(2);
     }
     return null;
 }
