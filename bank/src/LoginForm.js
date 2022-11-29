@@ -4,6 +4,7 @@ import { Alert } from "react-bootstrap";
 import React from "react"
 
 import AuthSignin from "./backend/authentication/AuthSignin";
+import { getCurrentEmail } from "./backend/currentUser";
 
 
 class LoginForm extends React.Component {
@@ -27,6 +28,7 @@ class LoginForm extends React.Component {
     this.setState({loading: false});
     if (err == null) {
       this.setState({error: 'Success!'});
+      console.log(getCurrentEmail());
       await this.timeout(1000);
       window.location = '/';
     }
