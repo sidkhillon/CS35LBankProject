@@ -20,6 +20,7 @@ export default class Main extends Component {
       modalVisible: false,
       email: "",
       balance: 0,
+      uid: null
     };
   }
 
@@ -35,10 +36,9 @@ export default class Main extends Component {
     onAuthStateChanged(auth, async (user) => {
       if (user) { // User is signed in
         const userData = await getDoc(doc(db, "users", user.uid));
-        console.log("New user real");
-        const bal = userData.data().balance;
+        const bal = userData.data().balance.toFixed(2);
         const email = user.email;
-        this.setState({email: email, balance: bal});
+        this.setState({email: email, balance: bal, uid: user.uid});
       } else {
         window.location = '/loginform';
       }
@@ -84,11 +84,7 @@ export default class Main extends Component {
             <Col xs="auto" >
               <Form className="d-flex">
                 <Form.Control type='date'/>
-                <Form.Select>
-                    <option>Select a User</option>
-                    <option value="test">test</option>
-                    <option value="test2">test2</option>
-                </Form.Select>
+                <Form.Control type='text' placeholder="Transaction email"/>
                 <Button>Search</Button>
               </Form>
             </Col>
@@ -107,7 +103,7 @@ export default class Main extends Component {
             </Col>
           </Row>
         </Container>
-        <AddTransaction show={this.state.modalVisible} hide ={() => setModalVisibility(false)}></AddTransaction>
+        <AddTransaction show={this.state.modalVisible} hide={() => setModalVisibility(false)}></AddTransaction>
       </div>
     )
   }
