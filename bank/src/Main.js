@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
+import { getCurrentBalance, getCurrentUID, getCurrentEmail } from './backend/currentUser';
+import { getAllTransactions } from './backend/getTransactions';
 
 export default class Main extends Component {
   constructor(props) {
@@ -15,19 +17,33 @@ export default class Main extends Component {
     };
   }
 
+  async getUserInfo () { // TODO: Methods inside are not fetching properly
+    let email = await getCurrentEmail();
+    let balance = await getCurrentBalance();
+    let uid = await getCurrentUID();
+    // let trans = await getAllTransactions(uid);
+    let trans = 0; // TODO: Fetch transactions
+    const res = [email, balance, trans]
+    return res;
+  }
+
   render() {
-    const test = {
+    const test = { // TODO: Populate transaction data
       12319083: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Jackson', 'amount': 123 },
       12319084: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Jackson', 'recipient': 'Sid', 'amount': 124 },
       12319085: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Juskeerat', 'amount': 125 },
       12319086: { 'date': 'testDate', 'description': 'testDesc', 'sender': 'Sid', 'recipient': 'Jackson', 'amount': 126 }
     }
-    const user = "Sid"
-    const bal = 124.23
+    var userInfo = new Array();
+    this.getUserInfo().then((res) => userInfo = res);
+    const user = userInfo[0];
+    const bal = userInfo[1];
+    const transactions = userInfo[2];
+    // const bal = 124.23
 
     const setModalVisibility = (val) => this.setState({modalVisible: val});
     const currentHrs = new Date().getHours();
-    return (
+    return ( // TODO: Search functionality
       <div>
         <Container>
           <Row>

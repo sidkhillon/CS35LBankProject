@@ -23,13 +23,16 @@ class LoginForm extends React.Component {
   async handleSubmit(event){
     event.preventDefault();
     this.setState({loading: true});
-    this.setState({error: await AuthSignin(this.state.email, this.state.password)});
+    const err = await AuthSignin(this.state.email, this.state.password);
     this.setState({loading: false});
-    if (this.state.error == '') {
+    if (err == null) {
       this.setState({error: 'Success!'});
+      await this.timeout(1000);
+      window.location = '/';
     }
-    await this.timeout(1000);
-    window.location = '/';
+    else {
+      this.setState({error: err});
+    }
   }
 
   timeout(delay) {

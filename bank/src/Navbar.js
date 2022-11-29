@@ -6,7 +6,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { getCurrentEmail } from './backend/currentUser';
 
 function NavbarComponent() {
-    const user = getCurrentEmail();
+    const user = getCurrentEmail(); // TODO: Get user's name
     return (
         <div>
             <Navbar bg="light">
