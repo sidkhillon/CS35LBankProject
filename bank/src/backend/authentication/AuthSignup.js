@@ -10,7 +10,7 @@ Otherwise returns an empty string
 The error is set to the output of this function
 */
 
-async function AuthSignup(email, password, confirm) {
+async function AuthSignup(name, email, password, confirm) {
   let user = null;
   // Checking that the password and its confirmation are the same
   if (password !== confirm){
@@ -39,6 +39,7 @@ async function AuthSignup(email, password, confirm) {
   // Setting up the user document in the Balances collection
   if (user !== null){
     const docData = {
+      name: user.name,
       email: user.email,
       balance: 0,
       transactions: []
