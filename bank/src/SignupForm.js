@@ -24,7 +24,7 @@ class SignupForm extends React.Component {
     event.preventDefault();
     // Can't do anything while function is loading
     this.setState({loading: true});
-    const err = await AuthSignup(this.state.email, this.state.password, this.state.confirm);
+    const err = await AuthSignup(this.state.name, this.state.email, this.state.password, this.state.confirm);
     this.setState({loading: false});
     if (err === null) {
       // If no error, redirect to the main page, as user is logged in

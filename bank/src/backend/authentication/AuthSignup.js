@@ -39,7 +39,7 @@ async function AuthSignup(name, email, password, confirm) {
   // Setting up the user document in the Balances collection
   if (user !== null){
     const docData = {
-      name: user.name,
+      name: name,
       email: user.email,
       balance: 0,
       transactions: []
