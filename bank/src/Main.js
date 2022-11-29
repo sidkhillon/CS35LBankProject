@@ -18,7 +18,7 @@ export default class Main extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      email: "",
+      name: "",
       balance: 0,
       uid: null
     };
@@ -38,7 +38,8 @@ export default class Main extends Component {
         const userData = await getDoc(doc(db, "users", user.uid));
         const bal = userData.data().balance.toFixed(2);
         const email = user.email;
-        this.setState({email: email, balance: bal, uid: user.uid});
+        const name = userData.data().name;
+        this.setState({name: name, balance: bal, uid: user.uid});
       } else {
         window.location = '/loginform';
       }
@@ -71,7 +72,7 @@ export default class Main extends Component {
           <Row>
             <Col>
               <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
-                <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.email}</h1>
+                <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.name}</h1>
               </div>
               <div style={{display: 'flex', justifyContent: "center"}}>
                 <h3>{"Your balance is $" + this.state.balance}</h3>
