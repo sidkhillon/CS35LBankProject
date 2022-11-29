@@ -20,9 +20,19 @@ class WithdrawMoney extends React.Component {
         event.preventDefault();
         await removeMoney(Number(this.state.amount)).then((r) => {
           this.setState({error: "Success"});
+
         }).catch((e) => {
           this.setState({error: String(e)})
         });
+        await this.timeout(500)
+        if (this.state.error == "Success") {
+          await this.timeout(500)
+          window.location = '/';
+        }
+    }
+
+    timeout(delay) {
+      return new Promise( res => setTimeout(res, delay) );
     }
 
     render() {

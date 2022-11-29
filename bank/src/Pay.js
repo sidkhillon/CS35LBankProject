@@ -26,6 +26,15 @@ class Pay extends React.Component {
       }).catch((e) => {
         this.setState({error: String(e)})
       });
+      await this.timeout(500)
+      if (this.state.error == "Success") {
+        await this.timeout(500)
+        window.location = '/';
+      }
+  }
+
+  timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
   }
 
     render() {
