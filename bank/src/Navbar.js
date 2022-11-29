@@ -6,12 +6,6 @@ import Navbar from 'react-bootstrap/Navbar';
 
 function NavbarComponent() {
     const user = "TempUser Name"
-    // var icon = (
-    //     <span class = 'logo'>
-    //         <a href = '/'/> 
-    //         <img src = './login.png' height = "33" width = "120" /> 
-    //     </span>
-    // );
     return (
         <div>
             <Navbar bg="light">
