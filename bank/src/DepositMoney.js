@@ -23,6 +23,15 @@ class DepositMoney extends React.Component {
         }).catch((e) => {
           this.setState({error: String(e)})
         });
+        await this.timeout(500)
+        if (this.state.error == "Success") {
+          await this.timeout(500)
+          window.location = '/';
+        }
+    }
+
+    timeout(delay) {
+      return new Promise( res => setTimeout(res, delay) );
     }
 
     render() {
@@ -31,7 +40,7 @@ class DepositMoney extends React.Component {
               <form className="Auth-form" onSubmit={this.handleSubmit}>
                 <div className="Auth-form-content">
                   <h3 className="Auth-form-title">Input Amount to Deposit</h3>
-                  { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+                  { this.state.error && <Alert variant="danger">{this.state.error}</Alert> } 
                   <div className="form-group mt-3">
                     <label>Amount:</label>
                     <input 
