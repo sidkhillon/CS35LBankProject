@@ -22,14 +22,7 @@ async function AuthSignup(email, password, confirm) {
   }
   let toReturn = await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
     user = userCredential.user;
-    //console.log(`Created user with uid ${user.uid}`);
-    /*
-    if (user != null){
-      console.log("Sending verification email");
-      sendEmailVerification(user);
-    }
-    */
-    return "";
+    return null;
   }).catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;

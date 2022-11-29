@@ -1,5 +1,4 @@
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import process from "process";
 import { db } from "./firebase"
 
 // Takes an array of transaction IDs as input and returns an array of those transaction objects
@@ -91,13 +90,13 @@ export async function getTransactionsByDate(UID, date){
     // Adds transaction object to array as long as it isn't a deposit/withdrawal
     const transactions = []
     query1Snapshot.forEach((doc) => {
-        if (doc.data().receiver != doc.data().sender) {
+        if (doc.data().receiver !== doc.data().sender) {
             transactions.push(doc.data());
         }
     });
 
     query2Snapshot.forEach((doc) => {
-        if (doc.data().receiver != doc.data().sender) {
+        if (doc.data().receiver !== doc.data().sender) {
             transactions.push(doc.data());
         }
     });

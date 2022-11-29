@@ -9,8 +9,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
-import { getCurrentBalance, getCurrentUID, getCurrentEmail } from './backend/currentUser';
-import { getAllTransactions } from './backend/getTransactions';
+import { getCurrentUID } from './backend/currentUser';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 
@@ -39,7 +38,6 @@ export default class Main extends Component {
         console.log("New user real");
         const bal = userData.data().balance;
         const email = user.email;
-        const currUID = user.uid;
         this.setState({email: email, balance: bal});
       } else {
         window.location = '/loginform';

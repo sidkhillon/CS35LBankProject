@@ -43,7 +43,7 @@ class Pay extends React.Component {
               <form className="Auth-form" onSubmit={this.handleSubmit}>
                 <div className="Auth-form-content">
                   <h3 className="Auth-form-title">Send Money
-                    <img src = {moneylogo} height = "40"/>
+                    <img src = {moneylogo} height = "40" alt="money"/>
                   </h3>
                   { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
                   <div className="form-group mt-3">

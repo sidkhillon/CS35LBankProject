@@ -1,4 +1,4 @@
-import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment, Timestamp } from "firebase/firestore";
+import { serverTimestamp, writeBatch, doc, arrayUnion, collection, increment } from "firebase/firestore";
 import { db } from "./firebase";
 import { getCurrentBalance, getCurrentUID } from "./currentUser";
 
