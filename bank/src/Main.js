@@ -70,7 +70,7 @@ export default class Main extends Component {
         <Container>
           <Row>
             <Col>
-              <div style={{display: 'flex', justifyContent: "center"}}>
+              <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
                 <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.email}</h1>
               </div>
               <div style={{display: 'flex', justifyContent: "center"}}>
@@ -83,21 +83,22 @@ export default class Main extends Component {
             <Col></Col>
             <Col xs="auto" >
               <Form className="d-flex">
-                <Form.Control type='date'/>
-                <Form.Control type='text' placeholder="Transaction email"/>
+                <Form.Control style={{ marginRight: "8px" }} type='date'/>
+                <Form.Select style={{ marginRight: "8px" }}>
+                    <option>Select a User</option>
+                    <option value="test">test</option>
+                    <option value="test2">test2</option>
+                </Form.Select>
                 <Button>Search</Button>
               </Form>
             </Col>
           </Row>
           <Transactions data={test} />
-          <Row style={{ marginTop: "20px" }}>
+          <Row style={{ marginTop: "5px" }}>
             <Col></Col>
             <Col xs="auto" >
               <Button onClick={() => setModalVisibility(true)}>Add a Transaction</Button>
             </Col>
-          </Row>
-          <Row style={{ marginTop: "20px" }}>
-            <Col></Col>
             <Col xs="auto" >
               <Button onClick={() => signOut(auth).then(() => {window.location = "/loginform"})}>Sign Out</Button>
             </Col>

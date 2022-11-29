@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table'
 function Transactions(props) {
     const currUser = "Sid"
     return (
-        <Table striped bordered responsive>
+        <Table style={{ marginTop: "20px" }} striped bordered responsive>
             <thead>
                 <tr>
                     <th>Person</th>
