@@ -11,6 +11,9 @@ import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
 import { getCurrentUID } from './backend/currentUser';
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { processTransactions, getAllTransactions } from './backend/getTransactions';
+import getUserByEmail from './backend/getUserByEmail';
+import getUserNameByID from './backend/getUserNameByID';
 
 
 export default class Main extends Component {
@@ -20,7 +23,8 @@ export default class Main extends Component {
       modalVisible: false,
       name: "",
       balance: 0,
-      uid: null
+      uid: null,
+      transactions: null
     };
   }
 
@@ -37,9 +41,19 @@ export default class Main extends Component {
       if (user) { // User is signed in
         const userData = await getDoc(doc(db, "users", user.uid));
         const bal = userData.data().balance.toFixed(2);
-        const email = user.email;
         const name = userData.data().name;
-        this.setState({name: name, balance: bal, uid: user.uid});
+
+        const transRefs = await getAllTransactions(user.uid);
+        const transactions = await processTransactions(transRefs);
+        let userTransactions = new Map();
+        for (let i = 0; i < this.state.transactions.length; i++) {
+          const senderName = await getUserNameByID(transactions[i].sender);
+          const receieverName = await getUserNameByID(transactions[i].receiever);
+          let data = { date: transactions[i].date, description: transactions[i].note, sender: senderName, recipient: receieverName, amount: transactions[i].amount };
+          userTransactions[i] = data;
+        }
+        this.setState({name: name, balance: bal, uid: user.uid, transactions: userTransactions});
+        
       } else {
         window.location = '/loginform';
       }
@@ -48,21 +62,13 @@ export default class Main extends Component {
 
   render() {
     console.log(getCurrentUID());
-    const test = { // TODO: Populate transaction data
-      12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
-      12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
-      12319085: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Juskeerat', amount: 125 },
-      12319086: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 126 }
-    }
-    //this.getUserInfo();
-    /*
-    var userInfo = new Array();
-    this.getUserInfo().then((res) => userInfo = res);
-    const user = userInfo[0];
-    const bal = userInfo[1];
-    const transactions = userInfo[2];
-*/
-    // const bal = 124.23
+    let test = this.state.transactions;
+    // let test = { // TODO: Populate transaction data
+    //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
+    //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
+    //   12319085: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Juskeerat', amount: 125 },
+    //   12319086: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 126 }
+    // }
 
     const setModalVisibility = (val) => this.setState({modalVisible: val});
     const currentHrs = new Date().getHours();

@@ -20,13 +20,12 @@ Instead, this should be done by checking if the sender UID and receiver UID are 
 */
 
 // Takes an array of transaction IDs as input and returns an array of those transaction objects
-export async function processsTransactions(transactions){
+export async function processTransactions(transactions){
     const allTransactions = []
     for (const transactionID of transactions) {
         const transRef = doc(db, "Transactions", transactionID);
         const transSnap = await getDoc(transRef);
-        const transData = transSnap.data();
-        allTransactions.push(transData);
+        allTransactions.push(transSnap.data());
     }
     return allTransactions;
 }
@@ -64,7 +63,7 @@ export async function getSharedTransactions(UID1, UID2){
     const sharedTrans = new Set(
         [...ts1].filter(transaction => ts2.has(transaction))
       );
-    const sharedTransObjs = await processsTransactions(sharedTrans);
+    const sharedTransObjs = await processTransactions(sharedTrans);
     return sharedTransObjs;
 }
 
@@ -130,24 +129,24 @@ function removeTime(date = new Date()) {
     );
   }
 
-  export async function getSharedTransactions(UID1, UID2){
-    if (UID1 === UID2){
-        throw new Error("Cannot retrieve transactions to self");
-    }
-    const trans1 = await getAllTransactions(UID1);
-    const trans2 = await getAllTransactions(UID2);
-    const ts1 = new Set();
-    for (let i = 0; i < trans1.length; i++) {
-        ts1.add(trans1[i]);
-    }
-    const ts2 = new Set();
-    for (let i = 0; i < trans2.length; i++) {
-        ts2.add(trans2[i]);
-    }
-    // Getting the shared transactions
-    const sharedTrans = new Set(
-        [...ts1].filter(transaction => ts2.has(transaction))
-      );
-    const sharedTransObjs = await processsTransactions(sharedTrans);
-    return sharedTransObjs;
-}
+//   export async function getSharedTransactions(UID1, UID2){
+//     if (UID1 === UID2){
+//         throw new Error("Cannot retrieve transactions to self");
+//     }
+//     const trans1 = await getAllTransactions(UID1);
+//     const trans2 = await getAllTransactions(UID2);
+//     const ts1 = new Set();
+//     for (let i = 0; i < trans1.length; i++) {
+//         ts1.add(trans1[i]);
+//     }
+//     const ts2 = new Set();
+//     for (let i = 0; i < trans2.length; i++) {
+//         ts2.add(trans2[i]);
+//     }
+//     // Getting the shared transactions
+//     const sharedTrans = new Set(
+//         [...ts1].filter(transaction => ts2.has(transaction))
+//       );
+//     const sharedTransObjs = await processsTransactions(sharedTrans);
+//     return sharedTransObjs;
+// }
