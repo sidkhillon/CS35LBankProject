@@ -51,6 +51,16 @@ class SignupForm extends React.Component {
               </h3>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             <div className="form-group mt-3">
+              <label>Name: </label>
+              <input 
+                type="name"
+                name="name"
+                className="form-control mt-1"
+                // value={this.state.email}
+                // onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-group mt-3">
               <label>Email Address:</label>
               <input 
                 type="email"
