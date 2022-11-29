@@ -1,5 +1,5 @@
 import React from 'react'
-import moneylogo from "./moneytransfer.png"
+import moneylogo from "./assets/moneytransfer.png"
 
 class Pay extends React.Component {
     constructor(props) {

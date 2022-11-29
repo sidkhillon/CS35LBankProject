@@ -1,5 +1,5 @@
 import React from 'react'
-import crownlogo from './logo.png';
+import crownlogo from './assets/logo.png';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';

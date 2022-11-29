@@ -1,7 +1,7 @@
 import AuthSignup from "./backend/authentication/AuthSignup";
 import { Alert } from "react-bootstrap";
 import React from "react"
-import signuplogo from "./signup.png"
+import signuplogo from "./assets/signup.png"
 
 
 class SignupForm extends React.Component {
