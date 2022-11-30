@@ -141,7 +141,7 @@ export default class Main extends Component {
         const transRefs = await getAllTransactions(user.uid);
         let transactions = await processTransactions(transRefs);
         transactions = await this.parseTransactions(transactions, user.uid, name);
-        this.setState({name: name, balance: bal, uid: user.uid, transactions: transactions});
+        this.setState({name: name, balance: bal, uid: user.uid, transactions: transactions, emailField: "", dateField: ""});
         
       } else {
         window.location = '/loginform';
@@ -182,7 +182,8 @@ export default class Main extends Component {
                <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
                <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search Transactions' value={this.state.emailField} onChange={this.handleChange}/>  
                 <Button onClick ={()=> this.submit()}>Search</Button>
-              </Form>
+                <Button onClick ={()=> this.componentDidMount()}>Clear</Button>
+              </Form>               
             </Col>
           </Row>
           <Transactions data={history} />
