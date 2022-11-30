@@ -77,9 +77,9 @@ export async function getWithdrawals(UID){
     const transRef = collection(db, "Transactions");
     const q = query(transRef, where("receiver", "==", UID), where("sender", "==", UID), where("amount", "<", 0));
     const querySnapshot = await getDocs(q);
-    let transactions = []
+    let transactions = {}
     querySnapshot.forEach((doc) => {
-        transactions.push(doc.data());
+        transactions[doc.id] = doc.data();
     });
     return transactions;
 }
@@ -89,9 +89,9 @@ export async function getDeposits(UID){
     const transRef = collection(db, "Transactions");
     const q = query(transRef, where("receiver", "==", UID), where("sender", "==", UID), where("amount", ">", 0));
     const querySnapshot = await getDocs(q);
-    let transactions = []
+    let transactions = {}
     querySnapshot.forEach((doc) => {
-        transactions.push(doc.data());
+        transactions[doc.id] = doc.data();
     });
     return transactions;
 }

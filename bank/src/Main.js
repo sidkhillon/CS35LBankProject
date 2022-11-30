@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { processTransactions, getAllTransactions, getTransactionsByDate, getSharedTransactions } from './backend/getTransactions';
+import { processTransactions, getAllTransactions, getTransactionsByDate, getSharedTransactions, getWithdrawals, getDeposits } from './backend/getTransactions';
 import { getUserNameByID } from './backend/getTransactions';
 import getUserByEmail from './backend/getUserByEmail';
 
@@ -30,19 +30,7 @@ export default class Main extends Component {
 
     this.handleChange = this.handleChange.bind(this)
   }
-/*
-  compareDates(date1, date2){
-    const s = date1.split('/')
-    const month = Number(s[0]) - 1
-    const day = Number(s[1]) - 1
-    const year = 2000 + Number(s[2].split('ㅤ')[0])
-    const formattedDate1 = new Date(year, month, day);
-    const formattedDate2 = new Date(date2);
-    return (formattedDate1.getFullYear() === formattedDate2.getFullYear())
-      && (formattedDate1.getMonth() === formattedDate2.getMonth())
-      && (formattedDate1.getDate() === formattedDate2.getDate());
-  }
-*/
+
   async submit(){
     let newMap = {};
     let emailUID = await getUserByEmail(this.state.emailField);
@@ -66,7 +54,6 @@ export default class Main extends Component {
     }
     else if (emailUID){
       newMap = await getSharedTransactions(emailUID, this.state.uid);
-      console.log("EMAIL");
     }
     newMap = await this.parseTransactions(newMap, this.state.uid, this.state.name);
     if(emailUID || this.state.dateField){
@@ -78,6 +65,22 @@ export default class Main extends Component {
     this.setState({
       [event.target.name]: event.target.value
     });
+  }
+
+  async showWithdrawals(){
+    if (this.state.uid){
+      let withdrawals = await getWithdrawals(this.state.uid);
+      withdrawals = await this.parseTransactions(withdrawals, this.state.uid, this.state.name);
+      this.setState({transactions: withdrawals});
+    }
+  }
+  
+  async showDeposits(){
+    if (this.state.uid){
+      let deposits = await getDeposits(this.state.uid);
+      deposits = await this.parseTransactions(deposits, this.state.uid, this.state.name);
+      this.setState({transactions: deposits});
+    }
   }
 
   parseDate(dateObject){
@@ -174,14 +177,20 @@ export default class Main extends Component {
               <Form className="d-flex">
                <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
                <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search Transactions' value={this.state.emailField} onChange={this.handleChange}/>  
-                <Button onClick ={()=> this.submit()}>Search</Button>
-                <Button onClick ={()=> this.componentDidMount()}>Clear</Button>
+                <Button style={{ marginRight: "8px" }} onClick ={()=> this.submit()}>Search</Button>
+                <Button style={{ marginRight: "8px" }} onClick ={()=> this.componentDidMount()}>Reset</Button>
               </Form>               
             </Col>
           </Row>
           <Transactions data={history} />
           <Row style={{ marginTop: "5px" }}>
             <Col></Col>
+            <Col xs="auto" >
+              <Button onClick={() => this.showWithdrawals()}>See Withdrawals</Button>
+            </Col>
+            <Col xs="auto" >
+              <Button onClick={() => this.showDeposits()}>See Deposits</Button>
+            </Col>
             <Col xs="auto" >
               <Button onClick={() => setModalVisibility(true)}>Make a Payment</Button>
             </Col>
