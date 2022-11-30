@@ -59,8 +59,10 @@ export default class Main extends Component {
           minutes = minutes < 10 ? '0'+minutes : minutes;
           var strTime = hours + ':' + minutes + ' ' + ampm;
           const dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + (date.getFullYear() - 2000) + "ㅤ–ㅤ" + strTime;
-
-          let data = { date: dateString, description: transactions[i].note, sender: senderName, recipient: receiverName, amount: transactions[i].amount.toFixed(2) };
+          transactions[i].sender = transactions[i].note == "Deposit" ? "Bank" : senderName;
+          transactions[i].receiver = transactions[i].note == "Withdrawal" ? "Bank" : receiverName;
+          transactions[i].amount = transactions[i].note == "Withdrawal" ? -transactions[i].amount : transactions[i].amount;
+          let data = { date: dateString, description: transactions[i].note, sender: transactions[i].sender, recipient: transactions[i].receiver, amount: transactions[i].amount.toFixed(2) };
           userTransactions[i] = data;
         }
         this.setState({name: name, balance: bal, uid: user.uid, transactions: userTransactions});
