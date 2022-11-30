@@ -102,7 +102,6 @@ export default class Main extends Component {
 
   render() {
     console.log(getCurrentUID());
-    let test = this.state.transactions;
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
     //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
@@ -136,7 +135,11 @@ export default class Main extends Component {
               </Form>
             </Col>
           </Row>
-          <Transactions data={test} />
+          { () => {
+            if (this.state.transactions) {
+                return <Transactions data={this.state.transactions} />
+            }
+          }}
           <Row style={{ marginTop: "5px" }}>
             <Col></Col>
             <Col xs="auto" >
