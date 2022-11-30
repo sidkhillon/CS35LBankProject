@@ -73,6 +73,50 @@ export default class Main extends Component {
     });
   }
 
+  parseDate(dateObject){
+    const date = dateObject.toDate()
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    let strTime = hours + ':' + minutes + ' ' + ampm;
+    const dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + (date.getFullYear() - 2000) + "ㅤ–ㅤ" + strTime;
+    return dateString
+  }
+
+  async parseTransactions(transactions, uid, name){
+    // Iterating through the transactions and determining if the value should be positive or negative
+    for (const transaction in transactions){
+      // If it wasn't a withdrawal or deposit, check if it was positive or negative
+      if (transactions[transaction]["sender"] !== transactions[transaction]["receiver"]){
+        // If the user sent the money, they lost money from their account
+        if (transactions[transaction]["sender"] === uid){
+          transactions[transaction]["amount"] *= -1;
+          transactions[transaction]["sender"] = name;
+          const receiver = await getUserNameByID(transactions[transaction]["receiver"]);
+          transactions[transaction]["receiver"] = receiver;
+        } else {
+          transactions[transaction]["receiver"] = name;
+          const sender = await getUserNameByID(transactions[transaction]["sender"]);
+          transactions[transaction]["sender"] = sender;
+        }
+      }
+      // Checking if it was a withdrawal or a deposit
+      else if (transactions[transaction]["amount"] < 0){
+        transactions[transaction]["sender"] = name;
+        transactions[transaction]["receiver"] = "Bank";
+      }
+      else {
+        transactions[transaction]["sender"] = "Bank";
+        transactions[transaction]["receiver"] = name;
+      }
+      transactions[transaction]["date"] = this.parseDate(transactions[transaction]["date"])
+    }
+    return transactions;
+  }
+
   componentDidMount() {
     onAuthStateChanged(auth, async (user) => {
       if (user) { // User is signed in
@@ -81,29 +125,9 @@ export default class Main extends Component {
         const name = userData.data().name;
 
         const transRefs = await getAllTransactions(user.uid);
-        const transactions = await processTransactions(transRefs);
-        let userTransactions = [];
-        for (let i = 0; i < transactions.length; i++) {
-          const senderName = await getUserNameByID(transactions[i].sender);
-          const receiverName = await getUserNameByID(transactions[i].receiver);
-
-          const date = transactions[i].date.toDate();
-          // const dateString = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
-          var hours = date.getHours();
-          var minutes = date.getMinutes();
-          var ampm = hours >= 12 ? 'pm' : 'am';
-          hours = hours % 12;
-          hours = hours ? hours : 12; // the hour '0' should be '12'
-          minutes = minutes < 10 ? '0'+minutes : minutes;
-          var strTime = hours + ':' + minutes + ' ' + ampm;
-          const dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + (date.getFullYear() - 2000) + "ㅤ–ㅤ" + strTime;
-          transactions[i].sender = transactions[i].note === "Deposit" ? "Bank" : senderName;
-          transactions[i].receiver = transactions[i].note === "Withdrawal" ? "Bank" : receiverName;
-          transactions[i].amount = transactions[i].note === "Withdrawal" ? -transactions[i].amount : transactions[i].amount;
-          let data = { date: dateString, description: transactions[i].note, sender: transactions[i].sender, recipient: transactions[i].receiver, amount: transactions[i].amount.toFixed(2) };
-          userTransactions[i] = data;
-        }
-        this.setState({name: name, balance: bal, uid: user.uid, transactions: userTransactions});
+        let transactions = await processTransactions(transRefs);
+        transactions = await this.parseTransactions(transactions, user.uid, name);
+        this.setState({name: name, balance: bal, uid: user.uid, transactions: transactions});
         
       } else {
         window.location = '/loginform';
@@ -112,10 +136,8 @@ export default class Main extends Component {
   }
 
   render() {
-    console.log(getCurrentUID());
     let history = this.state.transactions == null ? 
-    [{0: { date: 'Loading...', description: 'Loading...', sender: 'Loading...', recipient: 'Loading...', amount: 0 }}, 'Sid'] : 
-    [this.state.transactions, this.state.name];
+    { date: 'Loading...', note: 'Loading...', sender: 'Loading...', receiver: 'Loading...', amount: 0 } : this.state.transactions;
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
     //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },

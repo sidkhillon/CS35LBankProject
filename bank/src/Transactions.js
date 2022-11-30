@@ -1,8 +1,11 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
 
+
+
+
 function Transactions(props) {
-    const currUser = props.data[1];
+    console.log(props.data);
     return (
         <Table style={{ marginTop: "20px" }} striped bordered responsive>
             <thead>
@@ -14,14 +17,14 @@ function Transactions(props) {
                 </tr>
             </thead>
             <tbody>
-                {Object.keys(props.data[0]).map((key, index) => {
+                {Object.keys(props.data).map((key, index) => {
                     return (
                         <tr>
-                            {/* <th>{"sender" in props.data[key] ? props.data[key]["sender"] : props.data[key]["recipient"]}</th> */}
-                            <th>{props.data[0][key]["sender"] + " → " + props.data[0][key]["recipient"]}</th>
-                            <th>{props.data[0][key]["description"]}</th>
-                            <th>{props.data[0][key]["date"]}</th>
-                            <th style={{color: props.data[0][key]["recipient"] === currUser ? 'green' : 'red'}} >{(props.data[0][key]["recipient"] === currUser) ? "+" : "-"}${props.data[0][key]["amount"]}</th>
+                            {/* <th>{"sender" in props.data[key] ? props.data[key]["sender"] : props.data[key]["receiver"]}</th> */} 
+                            <th>{props.data[key]["sender"] + " → " + props.data[key]["receiver"]}</th>
+                            <th>{props.data[key]["note"]}</th>
+                            <th>{props.data[key]["date"]}</th>
+                            <th style={{color: props.data[key]["amount"] > 0 ? 'green' : 'red'}} >{(props.data[key]["amount"] > 0) ? "+" : "-"}${Math.abs(props.data[key]["amount"])}</th>
                         </tr>
                     )
                 })}

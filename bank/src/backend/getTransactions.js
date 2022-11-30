@@ -21,11 +21,11 @@ Instead, this should be done by checking if the sender UID and receiver UID are 
 
 // Takes an array of transaction IDs as input and returns an array of those transaction objects
 export async function processTransactions(transactions){
-    const allTransactions = []
+    let allTransactions = {}
     for (const transactionID of transactions) {
         const transRef = doc(db, "Transactions", transactionID);
         const transSnap = await getDoc(transRef);
-        allTransactions.push(transSnap.data());
+        allTransactions[transactionID] = transSnap.data();
     }
     return allTransactions;
 }
