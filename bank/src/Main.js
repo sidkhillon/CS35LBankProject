@@ -173,7 +173,7 @@ export default class Main extends Component {
             <Col xs="auto" >
               <Form className="d-flex">
                <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
-               <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search Transactions' value={this.state.emailField} onChange={this.handleChange}/>  
+               <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search users (email)' value={this.state.emailField} onChange={this.handleChange}/>  
                 <Button style={{ marginRight: "8px" }} onClick ={()=> this.submit()}>Search</Button>
                 <Button onClick ={()=> this.componentDidMount()}>Clear</Button>
               </Form>               
