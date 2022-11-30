@@ -65,7 +65,7 @@ export default class Main extends Component {
   render() {
     console.log(getCurrentUID());
     let history = this.state.transactions == null ? 
-    [{12319083: { date: 'Dec 1, 2022', description: 'BPlate swipe', sender: 'Sid', recipient: 'Jackson', amount: (12.50).toFixed(2) }}, 'Sid'] : 
+    [{0: { date: 'Loading...', description: 'Loading...', sender: 'Loading...', recipient: 'Loading...', amount: 0 }}, 'Sid'] : 
     [this.state.transactions, this.state.name];
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
