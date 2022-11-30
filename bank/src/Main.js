@@ -12,8 +12,7 @@ import AddTransaction from './AddTransaction';
 import { getCurrentUID } from './backend/currentUser';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { processTransactions, getAllTransactions } from './backend/getTransactions';
-import getUserByEmail from './backend/getUserByEmail';
-import getUserNameByID from './backend/getUserNameByID';
+import { getUserNameByID } from './backend/getTransactions';
 
 
 export default class Main extends Component {
@@ -46,10 +45,13 @@ export default class Main extends Component {
         const transRefs = await getAllTransactions(user.uid);
         const transactions = await processTransactions(transRefs);
         let userTransactions = new Map();
-        for (let i = 0; i < this.state.transactions.length; i++) {
+        for (let i = 0; i < transactions.length; i++) {
+          console.log(`Sender: ${transactions[i].sender}   Receiver: ${transactions[i].receiver}`);
           const senderName = await getUserNameByID(transactions[i].sender);
-          const receieverName = await getUserNameByID(transactions[i].receiever);
-          let data = { date: transactions[i].date, description: transactions[i].note, sender: senderName, recipient: receieverName, amount: transactions[i].amount };
+          const receiverName = await getUserNameByID(transactions[i].receiver);
+          const date = transactions[i].date.toDate();
+          const dateString = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
+          let data = { date: dateString, description: transactions[i].note, sender: senderName, recipient: receiverName, amount: transactions[i].amount.toFixed(2) };
           userTransactions[i] = data;
         }
         this.setState({name: name, balance: bal, uid: user.uid, transactions: userTransactions});
@@ -62,7 +64,9 @@ export default class Main extends Component {
 
   render() {
     console.log(getCurrentUID());
-    let test = this.state.transactions;
+    let history = this.state.transactions == null ? 
+    [{12319083: { date: 'Dec 1, 2022', description: 'BPlate swipe', sender: 'Sid', recipient: 'Jackson', amount: (12.50).toFixed(2) }}, 'Sid'] : 
+    [this.state.transactions, this.state.name];
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
     //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
@@ -100,7 +104,7 @@ export default class Main extends Component {
               </Form>
             </Col>
           </Row>
-          <Transactions data={test} />
+          <Transactions data={history} />
           <Row style={{ marginTop: "5px" }}>
             <Col></Col>
             <Col xs="auto" >

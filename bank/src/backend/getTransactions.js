@@ -30,6 +30,11 @@ export async function processTransactions(transactions){
     return allTransactions;
 }
 
+export async function getUserNameByID(UID){
+    const userData = await getDoc(doc(db, "users", UID));
+    return userData.data().name;
+}
+
 // Given a UID, returns an array of all of that users transactions
 export async function getAllTransactions(UID){
     const userRef = doc(db, "users", UID);

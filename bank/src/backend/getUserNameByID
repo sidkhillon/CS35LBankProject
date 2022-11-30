@@ -1,9 +1,0 @@
-import { collection, getDoc, query, where } from "firebase/firestore";
-import { db } from "./firebase"
-
-async function getUserNameByID(UID){
-    const userData = await getDoc(doc(db, "users", user.uid));
-    return userData.data().name;
-}
-
-export default getUserNameByID;
