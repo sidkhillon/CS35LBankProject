@@ -4,6 +4,9 @@ import { db } from "./firebase"
 const userRef = collection(db, "users");
 
 async function getUserByEmail(email){
+    if (!email){
+        return null;
+    }
     const q = query(userRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
     // If no users with email, return null
