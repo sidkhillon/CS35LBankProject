@@ -46,11 +46,20 @@ export default class Main extends Component {
         const transactions = await processTransactions(transRefs);
         let userTransactions = new Map();
         for (let i = 0; i < transactions.length; i++) {
-          console.log(`Sender: ${transactions[i].sender}   Receiver: ${transactions[i].receiver}`);
           const senderName = await getUserNameByID(transactions[i].sender);
           const receiverName = await getUserNameByID(transactions[i].receiver);
+
           const date = transactions[i].date.toDate();
-          const dateString = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
+          // const dateString = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
+          var hours = date.getHours();
+          var minutes = date.getMinutes();
+          var ampm = hours >= 12 ? 'pm' : 'am';
+          hours = hours % 12;
+          hours = hours ? hours : 12; // the hour '0' should be '12'
+          minutes = minutes < 10 ? '0'+minutes : minutes;
+          var strTime = hours + ':' + minutes + ' ' + ampm;
+          const dateString = (date.getMonth() + 1) + "/" + date.getDate() + "/" + (date.getFullYear() - 2000) + "ㅤ–ㅤ" + strTime;
+
           let data = { date: dateString, description: transactions[i].note, sender: senderName, recipient: receiverName, amount: transactions[i].amount.toFixed(2) };
           userTransactions[i] = data;
         }
