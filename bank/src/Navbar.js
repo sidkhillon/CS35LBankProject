@@ -21,11 +21,14 @@ function NavbarComponent() {
             <Nav.Link href="/pay">Pay</Nav.Link>
             <Nav.Link href="/deposit">Deposit</Nav.Link>
             <Nav.Link href="/withdraw">Withdraw</Nav.Link>
+            </Nav>
+            <Nav style={{ paddingBottom: "3px" }} className="ms-auto">
             <Nav.Link href="/loginform">Login</Nav.Link>
             <Nav.Link href="/signup">Signup</Nav.Link>
-          </Nav>
+            </Nav>
+          
         </Navbar.Collapse>
-                    <Navbar.Text>{user}</Navbar.Text>
+                    <Navbar.Text style={{ paddingTop: "6px", paddingLeft:"8px"}}>{user}</Navbar.Text>
                 </Container>
             </Navbar>
         </div>

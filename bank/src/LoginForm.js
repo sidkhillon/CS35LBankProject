@@ -7,7 +7,7 @@ import AuthSignin from "./backend/authentication/AuthSignin";
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {email: '', password: '', error: '', loading: false};
+    this.state = {email: '', password: '', error: '', loading: false, errorType: 'danger'};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,7 +27,7 @@ class LoginForm extends React.Component {
     this.setState({loading: false});
     if (err == null) {
       // If no error, redirect to main page, because user is signed in
-      this.setState({error: 'Signed In!'});
+      this.setState({error: 'Signed In!', errorType: 'success'});
       await this.timeout(1000);
       window.location = '/';
     }
@@ -48,7 +48,7 @@ class LoginForm extends React.Component {
             <h3 className="Auth-form-title">Login
               
             </h3>
-            { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+            { this.state.error && <Alert variant={this.state.errorType}>{this.state.error}</Alert> }
             <div className="form-group mt-3">
               <label>Email Address:</label>
               <input 
