@@ -103,12 +103,8 @@ export default class Main extends Component {
             <Col></Col>
             <Col xs="auto" >
               <Form className="d-flex">
-                <Form.Control style={{ marginRight: "8px" }} type='date'/>
-                <Form.Select style={{ marginRight: "8px" }}>
-                    <option>Select a User</option>
-                    <option value="test">test</option>
-                    <option value="test2">test2</option>
-                </Form.Select>
+               <Form.Control style={{ marginRight: "8px" }} type='date'/>
+               <Form.Control style={{ marginRight: "8px" }} type='email' placeholder='Search Transactions' />   
                 <Button>Search</Button>
               </Form>
             </Col>
