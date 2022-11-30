@@ -23,7 +23,9 @@ export default class Main extends Component {
       name: "",
       balance: 0,
       uid: null,
-      transactions: null
+      transactions: null, 
+      emailField: "", 
+      dateField: ""
     };
   }
 
@@ -35,6 +37,31 @@ export default class Main extends Component {
     this.setState({email: email, balance: balance});
   }
   */
+
+  handleChange(event, date, name){
+    let newMap = new Map();
+    let count = 0;
+    for (let i =0; i<this.state.transactions.size(); i++){
+      if(date && name){
+        if(this.state.transactions[i].date == date && (this.state.transactions[i].sender == name || this.state.transactions[i].receiver == name)){
+          newMap[count] = this.state.transactions[i];
+          count++;
+        }
+      else if(date && this.state.transactions[i].date == date){
+        newMap[count] = this.state.transactions[i];
+        count++;
+      }
+      else if(name && (this.state.transactions[i].sender == name || this.state.transactions[i].receiver == name)){
+        newMap[count] = this.state.transactions[i];
+        count++;
+      }
+      }    
+    }
+    if(name || date){
+      this.setState({transactions: newMap});
+    }
+  }
+
   componentDidMount() {
     onAuthStateChanged(auth, async (user) => {
       if (user) { // User is signed in
@@ -75,16 +102,14 @@ export default class Main extends Component {
 
   render() {
     console.log(getCurrentUID());
-    let history = this.state.transactions == null ? 
-    [{0: { date: 'Loading...', description: 'Loading...', sender: 'Loading...', recipient: 'Loading...', amount: 0 }}, 'Sid'] : 
-    [this.state.transactions, this.state.name];
+    let test = this.state.transactions;
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
     //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
     //   12319085: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Juskeerat', amount: 125 },
     //   12319086: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 126 }
     // }
-
+ 
     const setModalVisibility = (val) => this.setState({modalVisible: val});
     const currentHrs = new Date().getHours();
     return ( // TODO: Search functionality
@@ -93,7 +118,7 @@ export default class Main extends Component {
           <Row>
             <Col>
               <div style={{display: 'flex', justifyContent: "center", marginTop: "30px"}}>
-                <h1 style = {{color: "#E38424"}}>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.name}</h1>
+                <h1>{(currentHrs < 12 ? "Good morning, " : currentHrs < 17 ? "Good afternoon, " : "Good evening, ") + this.state.name}</h1>
               </div>
               <div style={{display: 'flex', justifyContent: "center"}}>
                 <h3>{"Your balance is $" + this.state.balance}</h3>
@@ -106,12 +131,12 @@ export default class Main extends Component {
             <Col xs="auto" >
               <Form className="d-flex">
                <Form.Control style={{ marginRight: "8px" }} type='date'/>
-               <Form.Control style={{ marginRight: "8px" }} type='email' placeholder='Search Transactions' />   
-                <Button>Search</Button>
+               <Form.Control style={{ marginRight: "8px" }} type='email' placeholder='Search Transactions' value={this.emailField}/>  
+                <Button onClick ={()=> this.handleChange(this.dateField,this.emailField)}>Search</Button>
               </Form>
             </Col>
           </Row>
-          <Transactions data={history} />
+          <Transactions data={test} />
           <Row style={{ marginTop: "5px" }}>
             <Col></Col>
             <Col xs="auto" >
@@ -127,3 +152,4 @@ export default class Main extends Component {
     )
   }
 }
+
