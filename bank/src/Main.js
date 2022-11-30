@@ -23,18 +23,56 @@ export default class Main extends Component {
       name: "",
       balance: 0,
       uid: null,
-      transactions: null
+      transactions: null,
+      emailField: "", 
+      dateField: ""
     };
+
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  /*
-  async getUserInfo () { // TODO: Methods inside are not fetching properly
-    const balance = await getCurrentBalance();
-    const email = getCurrentEmail();
-    const currUID = getCurrentUID();
-    this.setState({email: email, balance: balance});
+  compareDates(date1, date2){
+    const s = date1.split('/')
+    const month = Number(s[0]) - 1
+    const day = Number(s[1]) - 1
+    const year = 2000 + Number(s[2].split('ㅤ')[0])
+    const formattedDate1 = new Date(year, month, day);
+    const formattedDate2 = new Date(date2);
+    return (formattedDate1.getFullYear() === formattedDate2.getFullYear())
+      && (formattedDate1.getMonth() === formattedDate2.getMonth())
+      && (formattedDate1.getDate() === formattedDate2.getDate());
   }
-  */
+
+  submit(){
+    let newMap = [];
+    let count = 0;
+    for (let i =0; i<this.state.transactions.length; i++){
+      if(this.state.dateField && this.state.emailField){
+        if(this.compareDates(this.state.transactions[i].date, this.state.dateField) && (this.state.transactions[i].sender === this.state.emailField || this.state.transactions[i].recipient === this.state.emailField)){
+          newMap[count] = this.state.transactions[i];
+          count++;
+        }
+      }
+      else if(this.state.dateField && this.compareDates(this.state.transactions[i].date, this.state.dateField)){
+          newMap[count] = this.state.transactions[i];
+          count++;
+      }
+      else if(this.state.emailField && (this.state.transactions[i].sender === this.state.emailField || this.state.transactions[i].recipient === this.state.emailField)){
+          newMap[count] = this.state.transactions[i];
+          count++;
+      }
+    }    
+    if(this.state.emailField || this.state.dateField){
+      this.setState({transactions: newMap});
+    }
+  }
+
+  handleChange(event){
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
   componentDidMount() {
     onAuthStateChanged(auth, async (user) => {
       if (user) { // User is signed in
@@ -44,7 +82,7 @@ export default class Main extends Component {
 
         const transRefs = await getAllTransactions(user.uid);
         const transactions = await processTransactions(transRefs);
-        let userTransactions = new Map();
+        let userTransactions = [];
         for (let i = 0; i < transactions.length; i++) {
           const senderName = await getUserNameByID(transactions[i].sender);
           const receiverName = await getUserNameByID(transactions[i].receiver);
@@ -105,9 +143,9 @@ export default class Main extends Component {
             <Col></Col>
             <Col xs="auto" >
               <Form className="d-flex">
-               <Form.Control style={{ marginRight: "8px" }} type='date'/>
-               <Form.Control style={{ marginRight: "8px" }} type='email' placeholder='Search Transactions' />   
-                <Button>Search</Button>
+               <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
+               <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search Transactions' value={this.state.emailField} onChange={this.handleChange}/>  
+                <Button onClick ={()=> this.submit()}>Search</Button>
               </Form>
             </Col>
           </Row>
