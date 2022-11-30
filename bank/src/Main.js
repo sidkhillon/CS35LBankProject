@@ -44,8 +44,20 @@ export default class Main extends Component {
   }
 
   submit(){
-    let newMap = [];
-    let count = 0;
+    let newMap = {};
+    for (const transaction in this.state.transactions){
+      if (this.state.dateField && this.state.emailField){
+        if(this.compareDates(this.state.transactions[transaction]["date"], this.state.dateField) && (this.state.transactions[transaction]["sender"] === this.state.emailField || this.state.transactions[transaction]["recipient"] === this.state.emailField)){
+          newMap[transaction] = this.state.transactions[transaction];
+        }
+      }
+      else if (this.state.dateField && this.compareDates(this.state.transactions[transaction]["date"], this.state.dateField)){
+        newMap[transaction] = this.state.transactions[transaction];
+      }
+      else if(this.state.emailField && (this.state.transactions[transaction]["sender"] === this.state.emailField || this.state.transactions[transaction]["receiver"] === this.state.emailField)){
+        newMap[transaction] = this.state.transactions[transaction];
+      }
+    /*
     for (let i =0; i<this.state.transactions.length; i++){
       if(this.state.dateField && this.state.emailField){
         if(this.compareDates(this.state.transactions[i].date, this.state.dateField) && (this.state.transactions[i].sender === this.state.emailField || this.state.transactions[i].recipient === this.state.emailField)){
@@ -61,7 +73,9 @@ export default class Main extends Component {
           newMap[count] = this.state.transactions[i];
           count++;
       }
-    }    
+    } 
+    */
+    }   
     if(this.state.emailField || this.state.dateField){
       this.setState({transactions: newMap});
     }
