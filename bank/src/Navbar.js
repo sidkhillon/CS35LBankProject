@@ -42,7 +42,7 @@ class NavbarComponent extends Component {
                   <Nav.Link href="/deposit">Deposit</Nav.Link>
                   <Nav.Link href="/withdraw">Withdraw</Nav.Link>
                   </Nav>
-                  {this.state.name ||
+                  {!this.state.name && 
                     <Nav style={{ paddingBottom: "3px" }} className="ms-auto">
                       <Nav.Link href="/loginform">Login</Nav.Link>
                       <Nav.Link href="/signup">Signup</Nav.Link>
