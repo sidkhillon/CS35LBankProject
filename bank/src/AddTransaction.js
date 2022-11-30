@@ -34,20 +34,22 @@ function AddTransaction(props) {
     <Modal show = {props.show} onHide= {props.hide}>
         { error && <Alert variant="danger">{error}</Alert> }
         <Modal.Header closeButton>
-          <Modal.Title>Add a Transaction</Modal.Title>
+          <Modal.Title>Make a Payment</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
             <Modal.Body>
                 <Form.Group>
-                    <Form.FloatingLabel label="Amount">
+                    <Form.FloatingLabel label="Amount ($)">
                         <Form.Control type="number" name="amount" min="0" step="0.01" autoFocus/>
                     </Form.FloatingLabel>
                 </Form.Group>
+                <br></br>
                 <Form.Group>
-                    <Form.FloatingLabel label="Recipient">
+                    <Form.FloatingLabel label="Recipient (email)">
                         <Form.Control name="recipient" type="email"/>
                     </Form.FloatingLabel>
                 </Form.Group>
+                <br></br>
                 <Form.Group>
                     <Form.Label>Description</Form.Label>
                     <Form.Control name="desc" as="textarea" rows={3}/>

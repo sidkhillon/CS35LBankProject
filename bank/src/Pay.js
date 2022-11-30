@@ -52,6 +52,7 @@ class Pay extends React.Component {
                       type="email"
                       name="email"
                       className="form-control mt-1"
+                      placeholder="eggert@ucla.edu"
                       value={this.state.email}
                       onChange={this.handleChange}
                     />
@@ -62,6 +63,7 @@ class Pay extends React.Component {
                       type="number"
                       step="0.01"
                       name="amount"
+                      placeholder="123.45"
                       className="form-control mt-1"
                       value={this.state.amount}
                       onChange={this.handleChange}

@@ -115,7 +115,7 @@ export default class Main extends Component {
           <Row style={{ marginTop: "5px" }}>
             <Col></Col>
             <Col xs="auto" >
-              <Button onClick={() => setModalVisibility(true)}>Add a Transaction</Button>
+              <Button onClick={() => setModalVisibility(true)}>Make a Payment</Button>
             </Col>
             <Col xs="auto" >
               <Button onClick={() => signOut(auth).then(() => {window.location = "/loginform"})}>Sign Out</Button>
