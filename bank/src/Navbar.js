@@ -18,7 +18,6 @@ function NavbarComponent() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav style={{ paddingBottom: "3px" }} className="me-auto">
-            <Nav.Link href="/pay">Pay</Nav.Link>
             <Nav.Link href="/deposit">Deposit</Nav.Link>
             <Nav.Link href="/withdraw">Withdraw</Nav.Link>
             </Nav>

@@ -4,7 +4,6 @@ import "./style/App.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Main from "./Main"
 import NavbarComponent from "./Navbar"
-import Pay from "./Pay"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm.js"
 import DepositMoney from "./DepositMoney"
@@ -17,7 +16,6 @@ function App() {
         <NavbarComponent />
         <Routes>
           <Route path="/loginform" element={<LoginForm/>} />
-          <Route path="/pay" element={<Pay/>} />
           <Route path="/deposit" element={<DepositMoney />} />
           <Route path="/withdraw" element={<WithdrawMoney />} />
           <Route path="/signup" element={<SignupForm />} />
