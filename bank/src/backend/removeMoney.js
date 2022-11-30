@@ -5,7 +5,7 @@ import { db } from "./firebase"
 // You can only remove money from your account
 async function removeMoney(amount){
     const currUID = getCurrentUID();
-    if (currUID == null){
+    if (currUID === null){
         throw new Error("No user logged in");
     }
     if (typeof(amount) != "number"){
@@ -15,7 +15,7 @@ async function removeMoney(amount){
     if (amount < 0){
         throw new Error("Can only remove positive amounts of money");
     }
-    if (amount == 0){
+    if (amount === 0){
         throw new Error("Can only remove a non-zero amount of money");
     }
     // Can't add less than a cent of money
