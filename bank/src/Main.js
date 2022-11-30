@@ -9,10 +9,10 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
-import { getCurrentUID } from './backend/currentUser';
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { processTransactions, getAllTransactions } from './backend/getTransactions';
+import { processTransactions, getAllTransactions, getTransactionsByDate, getSharedTransactions } from './backend/getTransactions';
 import { getUserNameByID } from './backend/getTransactions';
+import getUserByEmail from './backend/getUserByEmail';
 
 
 export default class Main extends Component {
@@ -30,7 +30,7 @@ export default class Main extends Component {
 
     this.handleChange = this.handleChange.bind(this)
   }
-
+/*
   compareDates(date1, date2){
     const s = date1.split('/')
     const month = Number(s[0]) - 1
@@ -42,41 +42,34 @@ export default class Main extends Component {
       && (formattedDate1.getMonth() === formattedDate2.getMonth())
       && (formattedDate1.getDate() === formattedDate2.getDate());
   }
-
-  submit(){
+*/
+  async submit(){
     let newMap = {};
-    for (const transaction in this.state.transactions){
-      if (this.state.dateField && this.state.emailField){
-        if(this.compareDates(this.state.transactions[transaction]["date"], this.state.dateField) && (this.state.transactions[transaction]["sender"] === this.state.emailField || this.state.transactions[transaction]["recipient"] === this.state.emailField)){
-          newMap[transaction] = this.state.transactions[transaction];
-        }
-      }
-      else if (this.state.dateField && this.compareDates(this.state.transactions[transaction]["date"], this.state.dateField)){
-        newMap[transaction] = this.state.transactions[transaction];
-      }
-      else if(this.state.emailField && (this.state.transactions[transaction]["sender"] === this.state.emailField || this.state.transactions[transaction]["receiver"] === this.state.emailField)){
-        newMap[transaction] = this.state.transactions[transaction];
-      }
-    /*
-    for (let i =0; i<this.state.transactions.length; i++){
-      if(this.state.dateField && this.state.emailField){
-        if(this.compareDates(this.state.transactions[i].date, this.state.dateField) && (this.state.transactions[i].sender === this.state.emailField || this.state.transactions[i].recipient === this.state.emailField)){
-          newMap[count] = this.state.transactions[i];
-          count++;
-        }
-      }
-      else if(this.state.dateField && this.compareDates(this.state.transactions[i].date, this.state.dateField)){
-          newMap[count] = this.state.transactions[i];
-          count++;
-      }
-      else if(this.state.emailField && (this.state.transactions[i].sender === this.state.emailField || this.state.transactions[i].recipient === this.state.emailField)){
-          newMap[count] = this.state.transactions[i];
-          count++;
-      }
-    } 
-    */
-    }   
-    if(this.state.emailField || this.state.dateField){
+    let emailUID = await getUserByEmail(this.state.emailField);
+    const date = new Date(this.state.dateField);
+    // Can't search for self
+    if (emailUID === this.state.uid){
+      emailUID = null;
+    }
+    if (this.state.dateField && emailUID){
+      const correctDate = await getTransactionsByDate(this.state.uid, date);
+      const correctDateTrans = Object.keys(correctDate);
+      const correctUser = await getSharedTransactions(emailUID, this.state.uid);
+      const correctUserTrans = Object.keys(correctUser);
+      const sharedTrans = correctDateTrans.filter(x => correctUserTrans.indexOf(x) !== -1);
+      sharedTrans.forEach((transaction) => {
+        newMap[transaction] = correctDate[transaction];
+      });
+    }
+    else if (this.state.dateField) {
+      newMap = await getTransactionsByDate(this.state.uid, date);
+    }
+    else if (emailUID){
+      newMap = await getSharedTransactions(emailUID, this.state.uid);
+      console.log("EMAIL");
+    }
+    newMap = await this.parseTransactions(newMap, this.state.uid, this.state.name);
+    if(emailUID || this.state.dateField){
       this.setState({transactions: newMap});
     }
   }
@@ -108,23 +101,23 @@ export default class Main extends Component {
         // If the user sent the money, they lost money from their account
         if (transactions[transaction]["sender"] === uid){
           transactions[transaction]["amount"] *= -1;
-          transactions[transaction]["sender"] = name;
+          transactions[transaction]["senderName"] = name;
           const receiver = await getUserNameByID(transactions[transaction]["receiver"]);
-          transactions[transaction]["receiver"] = receiver;
+          transactions[transaction]["receiverName"] = receiver;
         } else {
-          transactions[transaction]["receiver"] = name;
+          transactions[transaction]["receiverName"] = name;
           const sender = await getUserNameByID(transactions[transaction]["sender"]);
-          transactions[transaction]["sender"] = sender;
+          transactions[transaction]["senderName"] = sender;
         }
       }
       // Checking if it was a withdrawal or a deposit
       else if (transactions[transaction]["amount"] < 0){
-        transactions[transaction]["sender"] = name;
-        transactions[transaction]["receiver"] = "Bank";
+        transactions[transaction]["senderName"] = name;
+        transactions[transaction]["receiverName"] = "Bank";
       }
       else {
-        transactions[transaction]["sender"] = "Bank";
-        transactions[transaction]["receiver"] = name;
+        transactions[transaction]["senderName"] = "Bank";
+        transactions[transaction]["receiverName"] = name;
       }
       transactions[transaction]["date"] = this.parseDate(transactions[transaction]["date"])
     }

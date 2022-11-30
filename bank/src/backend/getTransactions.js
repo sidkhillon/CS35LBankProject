@@ -100,33 +100,29 @@ export async function getDeposits(UID){
 export async function getTransactionsByDate(UID, date){
     const transRef = collection(db, "Transactions");
     // Creates new date d2 which is one day after d1
-    var d1 = new Date(removeTime(date).valueOf());
-    var d2 = new Date(d1.valueOf());
+    let d1 = new Date(removeTime(date).valueOf());
+    d1.setDate(d1.getDate()+1);
+    let d2 = new Date(d1.valueOf());
     d2.setDate(d1.getDate() + 1);
     // Store all collections where receiver or sender == UID in q
     const q1 = query(transRef, where("receiver", "==", UID), where('date', '>=', d1), where('date','<=', d2));
     const q2 = query(transRef, where("sender", "==", UID), where('date', '>=', d1), where('date','<=', d2));
     const query1Snapshot = await getDocs(q1);
     const query2Snapshot = await getDocs(q2);
-
-    // Adds transaction object to array as long as it isn't a deposit/withdrawal
-    const transactions = []
+    
+    const transactions = {}
     query1Snapshot.forEach((doc) => {
-        if (doc.data().receiver !== doc.data().sender) {
-            transactions.push(doc.data());
-        }
+        transactions[doc.id] = doc.data();
     });
 
     query2Snapshot.forEach((doc) => {
-        if (doc.data().receiver !== doc.data().sender) {
-            transactions.push(doc.data());
-        }
+        transactions[doc.id] = doc.data();
     });
 
     return transactions;
 }
 
-function removeTime(date = new Date()) {
+function removeTime(date) {
     return new Date(
       date.getFullYear(),
       date.getMonth(),

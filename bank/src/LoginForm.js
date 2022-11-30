@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
   async handleSubmit(event){
     // Prevents page from reloading
     event.preventDefault();
-    // Can't do anything while the function is loadinh
+    // Can't do anything while the function is loading
     this.setState({loading: true});
     const err = await AuthSignin(this.state.email, this.state.password);
     this.setState({loading: false});
