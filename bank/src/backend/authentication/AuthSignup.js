@@ -13,6 +13,9 @@ The error is set to the output of this function
 async function AuthSignup(name, email, password, confirm) {
   let user = null;
   // Checking that the password and its confirmation are the same
+  if (name.length === 0){
+    return "Must Provide a Name";
+  }
   if (password !== confirm){
     //console.log("Password no match");
     return "Passwords Do Not Match";
