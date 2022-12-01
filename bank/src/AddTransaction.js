@@ -8,6 +8,7 @@ import transaction from './backend/transaction';
 
 function AddTransaction(props) {
   const [error, setError] = useState(null);
+  const [alertType, setAlert] = useState("danger")
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
@@ -20,11 +21,14 @@ function AddTransaction(props) {
         return;
     }
     await transaction(recipientUID, desc, Number(amount)).then(async (r) => {
-        setError("Success");
+        setError("Payment Successful");
+        setAlert("success");
         await timeout(1000);
         props.hide();
+        setError(null);
     }).catch((e) => {
         setError(String(e));
+        setAlert("danger");
     });
   };
   function timeout(delay) {
@@ -32,9 +36,8 @@ function AddTransaction(props) {
   }
   return (
     <Modal show = {props.show} onHide= {props.hide}>
-        { error && <Alert variant="danger">{error}</Alert> }
-        <Modal.Header closeButton>
-          <Modal.Title>Make a Payment</Modal.Title>
+        <Modal.Header closeButton style={{alignItems: "center"}}>
+        <Modal.Title>{error ? <Alert variant={alertType}>{error}</Alert> : "Make a Payment"}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
             <Modal.Body>

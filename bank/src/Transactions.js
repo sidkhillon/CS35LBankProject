@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table'
 
 
 function Transactions(props) {
+    const transObject = props.data["transactions"];
     return (
         <Table style={{ marginTop: "20px" }} striped bordered responsive>
             <thead>
@@ -16,14 +17,14 @@ function Transactions(props) {
                 </tr>
             </thead>
             <tbody>
-                {Object.keys(props.data).map((key, index) => {
+                {Object.keys(transObject).reverse().slice(0,props.data["numTrans"]).map((key, index) => {
                     return (
                         <tr>
                             {/* <th>{"sender" in props.data[key] ? props.data[key]["senderName"] : props.data[key]["receiverName"]}</th> */} 
-                            <th>{props.data[key]["senderName"] + " → " + props.data[key]["receiverName"]}</th>
-                            <th>{props.data[key]["note"]}</th>
-                            <th>{props.data[key]["date"]}</th>
-                            <th style={{color: props.data[key]["amount"] > 0 ? 'green' : 'red'}} >{(props.data[key]["amount"] > 0) ? "+" : "-"}${Math.abs(props.data[key]["amount"])}</th>
+                            <th>{transObject[key]["senderName"] + " → " + transObject[key]["receiverName"]}</th>
+                            <th>{transObject[key]["note"]}</th>
+                            <th>{transObject[key]["date"]}</th>
+                            <th style={{color: transObject[key]["amount"] > 0 ? 'green' : 'red'}} >{(transObject[key]["amount"] > 0) ? "+" : "-"}${Math.abs(transObject[key]["amount"])}</th>
                         </tr>
                     )
                 })}

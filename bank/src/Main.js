@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import AddTransaction from './AddTransaction';
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { processTransactions, getAllTransactions, getTransactionsByDate, getSharedTransactions, getWithdrawals, getDeposits } from './backend/getTransactions';
 import { getUserNameByID } from './backend/getTransactions';
 import getUserByEmail from './backend/getUserByEmail';
@@ -25,7 +25,8 @@ export default class Main extends Component {
       uid: null,
       transactions: null,
       emailField: "", 
-      dateField: ""
+      dateField: "",
+      numTransactions: 10
     };
 
     this.handleChange = this.handleChange.bind(this)
@@ -137,7 +138,7 @@ export default class Main extends Component {
         const transRefs = await getAllTransactions(user.uid);
         let transactions = await processTransactions(transRefs);
         transactions = await this.parseTransactions(transactions, user.uid, name);
-        this.setState({name: name, balance: bal, uid: user.uid, transactions: transactions, emailField: "", dateField: ""});
+        this.setState({name: name, balance: bal, uid: user.uid, transactions: transactions, emailField: "", dateField: "", numTransactions: 10});
         
       } else {
         window.location = '/loginform';
@@ -172,19 +173,6 @@ export default class Main extends Component {
           </Row>
           <hr/>
           <Row style={{ marginTop: "20px" }}>
-            <Col></Col>
-            <Col xs="auto" >
-              <Form className="d-flex">
-               <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
-               <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search users (email)' value={this.state.emailField} onChange={this.handleChange}/>  
-                <Button style={{ marginRight: "8px" }} onClick ={()=> this.submit()}>Search</Button>
-                <Button onClick ={()=> this.componentDidMount()}>Clear</Button>
-              </Form>
-            </Col>
-          </Row>
-          <Transactions data={history} />
-          <Row style={{ marginTop: "5px" }}>
-            <Col></Col>
             <Col xs="auto" >
               <Button onClick={() => this.showWithdrawals()}>See Withdrawals</Button>
             </Col>
@@ -194,9 +182,23 @@ export default class Main extends Component {
             <Col xs="auto" >
               <Button onClick={() => setModalVisibility(true)}>Make a Payment</Button>
             </Col>
+            <Col></Col>
             <Col xs="auto" >
-              <Button onClick={() => signOut(auth).then(() => {window.location = "/loginform"})}>Sign Out</Button>
+              <Form className="d-flex">
+               <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
+               <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search users (email)' value={this.state.emailField} onChange={this.handleChange}/>  
+                <Button style={{ marginRight: "8px" }} onClick ={()=> this.submit()}>Search</Button>
+                <Button onClick ={()=> this.componentDidMount()}>Reset</Button>
+              </Form>
             </Col>
+          </Row>
+          <Transactions data={{transactions: history, numTrans: this.state.numTransactions}} />
+          <Row style={{ marginTop: "5px" }}>
+            <Col></Col>
+            <Col xs="auto" >
+              {(this.state.numTransactions < Object.keys(history).length) ? <Button onClick={() => this.setState({numTransactions: this.state.numTransactions + 5})}>Load More Transactions</Button> : "No More Transactions To Show"}
+            </Col>
+            <Col></Col>
           </Row>
         </Container>
         <AddTransaction show={this.state.modalVisible} hide={() => setModalVisibility(false)}></AddTransaction>
