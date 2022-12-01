@@ -148,7 +148,7 @@ export default class Main extends Component {
 
   render() {
     let history = this.state.transactions == null ? 
-    { date: 'Loading...', note: 'Loading...', sender: 'Loading...', receiver: 'Loading...', amount: 0 } : this.state.transactions;
+    {transactions: {date: 'Loading...', note: 'Loading...', senderName: 'Loading...', receiverName: 'Loading...', amount: 0}} : this.state.transactions;
     // let test = { // TODO: Populate transaction data
     //   12319083: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 123 },
     //   12319084: { date: 'testDate', description: 'testDesc', sender: 'Jackson', recipient: 'Sid', amount: 124 },
@@ -192,7 +192,7 @@ export default class Main extends Component {
                <Form.Control style={{ marginRight: "8px" }} type='date' name='dateField' value={this.state.dateField} onChange={this.handleChange}/>
                <Form.Control style={{ marginRight: "8px" }} type='email' name='emailField' placeholder='Search users (email)' value={this.state.emailField} onChange={this.handleChange}/>  
                 <Button style={{ marginRight: "8px" }} onClick ={()=> this.submit()}>Search</Button>
-                <Button onClick ={()=> this.componentDidMount()}>Reset</Button>
+                <Button onClick ={()=> this.componentDidMount()}>Refresh</Button>
               </Form>
             </Col>
           </Row>
