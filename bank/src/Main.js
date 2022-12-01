@@ -156,7 +156,11 @@ export default class Main extends Component {
     //   12319086: { date: 'testDate', description: 'testDesc', sender: 'Sid', recipient: 'Jackson', amount: 126 }
     // }
 
-    const setModalVisibility = (val) => this.setState({modalVisible: val});
+    const setModalVisibility = (val) => {
+        this.setState({modalVisible: val});
+        this.componentDidMount();
+    }
+
     const currentHrs = new Date().getHours();
     return ( // TODO: Search functionality
       <div>
